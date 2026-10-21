@@ -1,0 +1,9 @@
+{
+  "name": "plumio",
+  "private": true,
+  "type": "module",
+  "workspaces": ["client", "server"],
+  "scripts": {
+    "build": "npm run build --workspace client"
+  }
+}

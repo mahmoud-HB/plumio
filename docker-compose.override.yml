@@ -1,0 +1,8 @@
+# Loaded automatically by `docker compose up` (local development only).
+# If your network intercepts HTTPS (corporate proxy / self-signed certificates), Node refuses
+# the connection with "self-signed certificate in certificate chain". This disables strict TLS
+# verification inside the dev container. Delete this file on a trusted network.
+services:
+  server:
+    environment:
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
