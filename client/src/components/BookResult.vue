@@ -1,7 +1,8 @@
 <script setup>
-import { computed, onBeforeUnmount, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { base64ToBlob } from '../lib/media.js';
 import { THEMES } from '../lib/themes.js';
+import { buildSegments, createNarrator, frenchVoices, speechSupported } from '../lib/narrator.js';
 
 const props = defineProps({
   result: { type: Object, required: true },
@@ -39,9 +40,51 @@ function openTab() {
   window.open(ensureUrl(), '_blank', 'noopener');
 }
 
-const go = (d) => { index.value = Math.max(-1, Math.min(pages.value.length - 1, index.value + d)); };
+// Lecture audio (synthèse vocale du navigateur, gratuite, sans fichier à télécharger)
+const canSpeak = speechSupported();
+const audioState = ref('idle');
+const audioProgress = ref(0);
+const voices = ref([]);
+const voiceURI = ref('');
+const rate = ref(0.95);
+let narrator = null;
 
-onBeforeUnmount(() => pdfUrl.value && URL.revokeObjectURL(pdfUrl.value));
+function loadVoices() {
+  voices.value = frenchVoices();
+  if (!voiceURI.value && voices.value.length) voiceURI.value = (voices.value.find((v) => v.default) ?? voices.value[0]).voiceURI;
+  narrator?.set({ voiceURI: voiceURI.value });
+}
+
+onMounted(() => {
+  if (!canSpeak) return;
+  const segments = buildSegments(props.result.story);
+  narrator = createNarrator(segments, {
+    onSegment: (i, seg) => { index.value = seg.page; audioProgress.value = i / segments.length; },
+    onState: (st) => { audioState.value = st; if (st === 'idle') audioProgress.value = 0; }
+  });
+  loadVoices();
+  window.speechSynthesis.addEventListener('voiceschanged', loadVoices);
+});
+
+function toggleAudio() {
+  if (!narrator) return;
+  if (audioState.value === 'playing') narrator.pause();
+  else if (audioState.value === 'paused') narrator.resume();
+  else narrator.play(0);
+}
+const stopAudio = () => narrator?.stop();
+const onVoice = () => narrator?.set({ voiceURI: voiceURI.value });
+const onRate = () => narrator?.set({ rate: Number(rate.value) });
+
+const go = (d) => {
+  index.value = Math.max(-1, Math.min(pages.value.length - 1, index.value + d));
+  narrator?.seekPage(index.value);
+};
+
+onBeforeUnmount(() => {
+  pdfUrl.value && URL.revokeObjectURL(pdfUrl.value);
+  if (canSpeak) { narrator?.stop(); window.speechSynthesis.removeEventListener('voiceschanged', loadVoices); }
+});
 </script>
 
 <template>
@@ -87,6 +130,28 @@ onBeforeUnmount(() => pdfUrl.value && URL.revokeObjectURL(pdfUrl.value));
           <span aria-hidden="true">⬇</span> Télécharger le PDF
         </button>
         <button class="btn btn-ghost btn-block" @click="openTab">Ouvrir dans un nouvel onglet</button>
+        <div class="audio-card">
+          <div class="audio-title"><span aria-hidden="true">🎧</span> Écouter l’histoire</div>
+          <template v-if="canSpeak">
+            <div class="audio-controls">
+              <button class="btn btn-soft" :aria-label="audioState === 'playing' ? 'Mettre en pause' : 'Lire l’histoire'" @click="toggleAudio">
+                {{ audioState === 'playing' ? '❚❚ Pause' : audioState === 'paused' ? '▶ Reprendre' : '▶ Écouter' }}
+              </button>
+              <button class="btn btn-ghost btn-sm" :disabled="audioState === 'idle'" @click="stopAudio">■ Arrêter</button>
+            </div>
+            <div class="audio-bar" role="progressbar" aria-label="Progression de la lecture" :aria-valuenow="Math.round(audioProgress * 100)" aria-valuemin="0" aria-valuemax="100"><span :style="{ width: audioProgress * 100 + '%' }"></span></div>
+            <div class="audio-options">
+              <label v-if="voices.length > 1">Voix
+                <select v-model="voiceURI" @change="onVoice"><option v-for="v in voices" :key="v.voiceURI" :value="v.voiceURI">{{ v.name }}</option></select>
+              </label>
+              <label>Vitesse
+                <select v-model="rate" @change="onRate"><option :value="0.8">Lente</option><option :value="0.95">Normale</option><option :value="1.1">Rapide</option></select>
+              </label>
+            </div>
+            <p class="field-hint">Lecture à voix haute par ton appareil, sans fichier audio à télécharger. La qualité de la voix dépend de ton navigateur.</p>
+          </template>
+          <p v-else class="field-hint">La lecture audio n’est pas disponible sur ce navigateur. Essaie Chrome, Edge ou Safari.</p>
+        </div>
         <p v-if="downloaded" class="notice notice-success inline" role="status">Téléchargement lancé : retrouve <strong>{{ result.fileName }}</strong> dans tes fichiers.</p>
         <ul class="facts">
           <li><span>Écrit par</span><strong>{{ result.mode === 'ai' ? 'IA, relue automatiquement' : 'Bibliothèque Plumio' }}</strong></li>

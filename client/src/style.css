@@ -302,3 +302,15 @@ input[type='text']:focus { outline: none; border-color: var(--primary); box-shad
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* Lecture audio */
+.audio-card { margin-top: .4rem; padding: 1rem; border-radius: var(--radius); background: linear-gradient(160deg, #efeafc, #fbe9f0); display: grid; gap: .7rem; }
+.audio-title { font: 600 1.05rem var(--font-title); color: #4b3a8f; }
+.audio-controls { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; }
+.btn-soft { background: #fff; color: #4b3a8f; border: 1.5px solid #cfc3f2; border-radius: 999px; padding: .65rem 1.2rem; font-weight: 600; cursor: pointer; }
+.btn-soft:hover { background: #f6f2ff; }
+.audio-bar { height: 6px; border-radius: 999px; background: rgba(124, 98, 201, .18); overflow: hidden; }
+.audio-bar span { display: block; height: 100%; background: #7c62c9; transition: width .3s; }
+.audio-options { display: flex; gap: .8rem; flex-wrap: wrap; font-size: .85rem; color: var(--muted); }
+.audio-options label { display: grid; gap: .2rem; flex: 1; min-width: 120px; }
+.audio-options select { padding: .4rem .5rem; border-radius: 10px; border: 1px solid var(--line); background: #fff; font: inherit; color: inherit; }
