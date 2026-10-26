@@ -4,9 +4,10 @@ import HomeView from './components/HomeView.vue';
 import StoryForm from './components/StoryForm.vue';
 import LoadingBook from './components/LoadingBook.vue';
 import BookResult from './components/BookResult.vue';
+import GamesView from './components/GamesView.vue';
 import { generateBook } from './lib/api.js';
 
-const page = ref('home'); // 'home' | 'create'
+const page = ref('home'); // 'home' | 'create' | 'games'
 const menuOpen = ref(false);
 const status = ref('idle'); // 'idle' | 'loading' | 'done'
 const error = ref('');
@@ -64,6 +65,7 @@ function again() {
         <nav class="nav" :class="{ open: menuOpen }" aria-label="Navigation principale">
           <a href="#" :class="{ active: page === 'home' }" @click.prevent="go('home')">Accueil</a>
           <a href="#" :class="{ active: page === 'create' }" @click.prevent="go('create')">Créer une histoire</a>
+          <a href="#" :class="{ active: page === 'games' }" @click.prevent="go('games')">Jeux à imprimer</a>
         </nav>
 
         <div class="header-actions">
@@ -76,7 +78,9 @@ function again() {
     </header>
 
     <main class="wrap main">
-      <HomeView v-if="page === 'home'" @start="(t) => go('create', typeof t === 'string' ? t : '')" />
+      <HomeView v-if="page === 'home'" @start="(t) => go('create', typeof t === 'string' ? t : '')" @games="go('games')" />
+
+      <GamesView v-else-if="page === 'games'" />
 
       <template v-else>
         <LoadingBook v-if="status === 'loading'" :name="form.name.trim()" />

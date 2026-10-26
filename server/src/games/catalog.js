@@ -1,0 +1,61 @@
+// Catalogue des jeux (servi au client) et données de personnalisation par thème.
+import { themeKey } from '../pdf/scenes.js';
+
+export const BANDS = {
+  petits: { id: 'petits', label: '3-5 ans', min: 3, max: 5 },
+  moyens: { id: 'moyens', label: '6-8 ans', min: 6, max: 8 },
+  grands: { id: 'grands', label: '9-12 ans', min: 9, max: 12 }
+};
+
+export function bandOf(age) {
+  const a = Number(age);
+  if (a <= 5) return 'petits';
+  if (a >= 9) return 'grands';
+  return 'moyens';
+}
+
+export const GAMES = [
+  { id: 'coloriage', band: 'petits', icon: '🖍️', title: 'Grand coloriage', blurb: 'Un grand dessin à colorier, avec le prénom de l’enfant en bannière.', skill: 'Motricité fine, créativité', minutes: 20 },
+  { id: 'points', band: 'petits', icon: '🔢', title: 'Relie les points', blurb: 'Des nombres à relier dans l’ordre pour faire apparaître une surprise (étoile, cœur ou maison).', skill: 'Chiffres, tracé', minutes: 10 },
+  { id: 'labyrinthe', band: 'petits', icon: '🧭', title: 'Mon premier labyrinthe', blurb: 'Un labyrinthe large et facile : aider l’enfant à atteindre son but.', skill: 'Repérage, concentration', minutes: 10 },
+  { id: 'compte', band: 'petits', icon: '⭐', title: 'Compte les formes', blurb: 'Étoiles, cœurs et ballons à compter, puis à noter dans les cases.', skill: 'Dénombrement', minutes: 10 },
+  { id: 'prenom', band: 'petits', icon: '✏️', title: 'J’écris mon prénom', blurb: 'Le prénom à repasser, à recopier sur des lignes guides, et un cadre pour se dessiner.', skill: 'Écriture, reconnaissance des lettres', minutes: 15 },
+
+  { id: 'motsmeles', band: 'moyens', icon: '🔤', title: 'Mots mêlés', blurb: 'Grille 10×10 avec le prénom de l’enfant et des mots du thème choisi.', skill: 'Lecture, attention', minutes: 15 },
+  { id: 'sudoku', band: 'moyens', icon: '🔲', title: 'Sudoku 6×6', blurb: 'Une grille générée à solution unique, pour débuter la logique.', skill: 'Logique', minutes: 15 },
+  { id: 'labyrinthe', band: 'moyens', icon: '🧭', title: 'Labyrinthe', blurb: 'Un labyrinthe moyen avec départ et arrivée à thème.', skill: 'Anticipation', minutes: 10 },
+  { id: 'code', band: 'moyens', icon: '🔐', title: 'Message secret', blurb: 'Chaque nombre cache une lettre : déchiffrer un message adressé à l’enfant.', skill: 'Lecture, alphabet', minutes: 15 },
+  { id: 'calculs', band: 'moyens', icon: '➕', title: 'Défi des calculs', blurb: '12 calculs adaptés à l’âge (additions, soustractions, tables) et un score.', skill: 'Calcul mental', minutes: 15 },
+
+  { id: 'motsmeles', band: 'grands', icon: '🔤', title: 'Mots mêlés XXL', blurb: 'Grille 14×14 dans les 8 directions, avec le prénom caché parmi les mots.', skill: 'Observation', minutes: 20 },
+  { id: 'sudoku', band: 'grands', icon: '🔲', title: 'Sudoku 9×9', blurb: 'Une vraie grille 9×9 à solution unique, différente à chaque téléchargement.', skill: 'Logique, déduction', minutes: 25 },
+  { id: 'labyrinthe', band: 'grands', icon: '🧭', title: 'Labyrinthe géant', blurb: 'Un labyrinthe dense 18×22 à résoudre au crayon.', skill: 'Planification', minutes: 15 },
+  { id: 'cesar', band: 'grands', icon: '🕵️', title: 'Code de César', blurb: 'Un message codé par décalage de lettres : trouver la clé et le déchiffrer.', skill: 'Cryptographie, logique', minutes: 20 },
+  { id: 'anagrammes', band: 'grands', icon: '🔀', title: 'Anagrammes', blurb: 'Remettre en ordre 9 mots du thème, plus le prénom en bonus.', skill: 'Orthographe, vocabulaire', minutes: 20 }
+];
+
+export const gamesFor = (band) => GAMES.filter((g) => g.band === band);
+export const findGame = (band, id) => GAMES.find((g) => g.band === band && g.id === id);
+
+// Données par thème : mots pour les grilles, objectifs de labyrinthe, messages secrets.
+const DATA = {
+  generic: { label: 'Aventure', words: ['AVENTURE', 'AMITIE', 'COURAGE', 'SECRET', 'TRESOR', 'REVE', 'MAGIE', 'JEU', 'SOURIRE', 'CHANCE'], goal: 'son trésor', secret: 'TU AS TROUVE LE TRESOR', spot: 'SOUS LE GRAND CHENE' },
+  space: { label: 'Espace', words: ['FUSEE', 'ETOILE', 'LUNE', 'PLANETE', 'COMETE', 'ROBOT', 'SOLEIL', 'GALAXIE', 'ORBITE', 'ASTRE'], goal: 'sa fusée', secret: 'TU ES UN VRAI ASTRONAUTE', spot: 'SUR LA PLANETE ROSE' },
+  forest: { label: 'Forêt magique', words: ['ARBRE', 'RENARD', 'HIBOU', 'FEUILLE', 'LUCIOLE', 'MOUSSE', 'SENTIER', 'LAPIN', 'FOUGERE', 'ECUREUIL'], goal: 'la clairière secrète', secret: 'LA FORET TE CONNAIT', spot: 'DANS LA CLAIRIERE' },
+  pirates: { label: 'Pirates', words: ['TRESOR', 'BATEAU', 'PERROQUET', 'CARTE', 'COFFRE', 'OCEAN', 'ILE', 'CAPITAINE', 'VOILE', 'ANCRE'], goal: 'le trésor', secret: 'LE TRESOR EST A TOI', spot: 'SOUS LE PALMIER' },
+  heroes: { label: 'Super-héros', words: ['CAPE', 'POUVOIR', 'COURAGE', 'MASQUE', 'VILLE', 'SAUVER', 'FORCE', 'ECLAIR', 'HEROS', 'VITESSE'], goal: 'la tour des héros', secret: 'TON POUVOIR EST TON COEUR', spot: 'AU SOMMET DE LA TOUR' },
+  unicorns: { label: 'Licornes', words: ['LICORNE', 'NUAGE', 'MAGIE', 'COULEUR', 'CRINIERE', 'ETOILE', 'REVE', 'PAILLETTE', 'ARC', 'PONEY'], goal: 'l’arc-en-ciel', secret: 'LA MAGIE EST EN TOI', spot: 'AU BOUT DE L ARC EN CIEL' },
+  dinos: { label: 'Dinosaures', words: ['VOLCAN', 'FOUGERE', 'RAPTOR', 'FOSSILE', 'OEUF', 'GEANT', 'HERBIVORE', 'GRIFFE', 'DENT', 'PIERRE'], goal: 'la mer', secret: 'TU ES UN EXPLORATEUR', spot: 'PRES DU VOLCAN' },
+  ocean: { label: 'Océan', words: ['BALEINE', 'CORAIL', 'POISSON', 'PERLE', 'VAGUE', 'POULPE', 'TORTUE', 'SIRENE', 'ALGUE', 'DAUPHIN'], goal: 'la perle', secret: 'LA MER CHANTE POUR TOI', spot: 'AU FOND DU RECIF' },
+  knights: { label: 'Chevaliers & dragons', words: ['CHATEAU', 'DRAGON', 'EPEE', 'BOUCLIER', 'ROI', 'ARMURE', 'TOURNOI', 'CHEVALIER', 'ROYAUME', 'TOUR'], goal: 'le château', secret: 'TU ES UN BRAVE CHEVALIER', spot: 'DANS LA GRANDE TOUR' },
+  safari: { label: 'Savane', words: ['GIRAFE', 'LION', 'ZEBRE', 'SAVANE', 'ELEPHANT', 'SINGE', 'BAOBAB', 'GUEPARD', 'SOLEIL', 'HERBE'], goal: 'le baobab', secret: 'TU AS LE COEUR D UN LION', spot: 'SOUS LE BAOBAB' },
+  robots: { label: 'Robots & inventions', words: ['ROBOT', 'ENGRENAGE', 'ATELIER', 'CIRCUIT', 'PILE', 'INVENTEUR', 'MOTEUR', 'ECRAN', 'VIS', 'BOULON'], goal: 'l’atelier', secret: 'TU ES UN GRAND INVENTEUR', spot: 'DANS L ATELIER' },
+  circus: { label: 'Cirque', words: ['CHAPITEAU', 'CLOWN', 'TRAPEZE', 'MAGICIEN', 'JONGLEUR', 'PISTE', 'ACROBATE', 'BALLON', 'NEZ', 'SPECTACLE'], goal: 'la piste du cirque', secret: 'TU ES LA STAR DU SPECTACLE', spot: 'SOUS LE CHAPITEAU' },
+  mystery: { label: 'Mystère & détectives', words: ['INDICE', 'ENQUETE', 'LOUPE', 'MYSTERE', 'SECRET', 'DETECTIVE', 'ENIGME', 'TEMOIN', 'TRACE', 'CLE'], goal: 'la clé du mystère', secret: 'ENQUETE RESOLUE BRAVO', spot: 'DERRIERE LA PORTE BLEUE' }
+};
+
+export function themeData(theme) {
+  if (!theme) return { key: 'generic', ...DATA.generic };
+  const key = themeKey(theme);
+  return { key, ...(DATA[key] || DATA.generic) };
+}

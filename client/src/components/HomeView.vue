@@ -1,6 +1,6 @@
 <script setup>
 import { THEMES } from '../lib/themes.js';
-defineEmits(['start']);
+defineEmits(['start', 'games']);
 
 const steps = [
   { n: '1', title: 'Parlez-nous de votre enfant', text: 'Son prénom, son âge et le thème qui le fait rêver. Une photo pour la couverture, si vous le souhaitez.' },
@@ -69,6 +69,16 @@ const perks = [
           <small>{{ t.tagline }}</small>
         </button>
       </div>
+    </section>
+
+    <section class="section games-teaser">
+      <div>
+        <span class="eyebrow">Nouveau</span>
+        <h2 class="section-title">Des jeux à imprimer au prénom de votre enfant</h2>
+        <p class="lead">Coloriages, labyrinthes, mots mêlés, sudoku, messages secrets… 5 jeux par tranche d’âge, personnalisés et prêts à télécharger en PDF.</p>
+        <button class="btn btn-ghost btn-lg" @click="$emit('games')">Découvrir les jeux <span aria-hidden="true">→</span></button>
+      </div>
+      <div class="games-teaser-icons" aria-hidden="true"><span>🖍️</span><span>🧭</span><span>🔤</span><span>🔐</span><span>🔲</span><span>🕵️</span></div>
     </section>
 
     <section class="section">

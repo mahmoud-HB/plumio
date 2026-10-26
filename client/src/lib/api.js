@@ -33,3 +33,22 @@ export async function generateBook({ name, theme, age, photo }) {
   if (!data.pdfBase64) throw new Error('Le livre est arrivé incomplet. Réessaie.');
   return data;
 }
+
+/** Télécharge un PDF de jeux (un jeu ou toute la tranche d'âge) ; renvoie un Blob. */
+export async function fetchGamesPdf({ name, age, theme, gameId = 'all', variant = 0, solution = false }) {
+  let res;
+  try {
+    res = await fetch('/api/games/pdf', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, age: Number(age), theme: theme || undefined, gameId, variant, solution })
+    });
+  } catch {
+    throw new Error('Impossible de joindre le serveur. Vérifie ta connexion et réessaie.');
+  }
+  if (!res.ok) {
+    const data = await res.json().catch(() => null);
+    throw new Error(data?.error || friendlyError(res.status));
+  }
+  return res.blob();
+}

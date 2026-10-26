@@ -10,6 +10,8 @@ import { generateIllustrations } from './images.js';
 import { buildBook } from './pdf/book.js';
 import { detectImageType } from './pdf/layout.js';
 import { themeKey } from './pdf/scenes.js';
+import { buildGamesPdf, validateGameInput } from './games/render.js';
+import { BANDS, GAMES, bandOf } from './games/catalog.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -118,6 +120,36 @@ app.post('/api/generate', (req, res, next) => {
   } catch (err) {
     console.error('[generate]', err);
     res.status(500).json({ error: 'Le livre n’a pas pu être créé. Réessaie dans un instant ; tes informations sont conservées.' });
+  }
+});
+
+app.get('/api/games/catalog', (_req, res) => {
+  res.json({ ok: true, bands: Object.values(BANDS), games: GAMES, themes: THEMES });
+});
+
+app.post('/api/games/pdf', async (req, res) => {
+  try {
+    const { name, age, theme, gameId, variant, solution } = req.body || {};
+    const problem = validateGameInput({ name, age });
+    if (problem) return res.status(400).json({ ok: false, error: problem });
+    const band = bandOf(age);
+    const known = GAMES.filter((g) => g.band === band).map((g) => g.id);
+    if (gameId && gameId !== 'all' && !known.includes(gameId)) {
+      return res.status(400).json({ ok: false, error: 'Ce jeu n’existe pas pour cette tranche d’âge.' });
+    }
+    const pdf = await buildGamesPdf({
+      name, age, theme: THEMES.includes(theme) ? theme : '',
+      gameIds: !gameId || gameId === 'all' ? 'all' : [gameId],
+      variant: Number.isInteger(variant) && variant >= 0 && variant < 1000 ? variant : 0,
+      solution: solution === true
+    });
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Length', pdf.length);
+    res.setHeader('Cache-Control', 'no-store');
+    res.send(pdf);
+  } catch (e) {
+    console.error('games pdf', e);
+    res.status(500).json({ ok: false, error: 'Impossible de créer les jeux pour le moment. Réessaie dans un instant.' });
   }
 });
 
