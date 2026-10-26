@@ -7,7 +7,10 @@ export const THEMES = [
   { id: 'Dinosaures', emoji: '🦕', tagline: 'Une expédition au temps des géants', tone: 'dinos' },
   { id: 'Océan', emoji: '🐙', tagline: 'Récifs, baleines et trésors sous les vagues', tone: 'ocean' },
   { id: 'Chevaliers & dragons', emoji: '🏰', tagline: 'Châteaux, quêtes et dragons au grand cœur', tone: 'knights' },
-  { id: 'Savane', emoji: '🦒', tagline: 'Safari au milieu des animaux d’Afrique', tone: 'safari' }
+  { id: 'Savane', emoji: '🦒', tagline: 'Safari au milieu des animaux d’Afrique', tone: 'safari' },
+  { id: 'Robots & inventions', emoji: '🤖', tagline: 'Un atelier, un robot ami et une invention géniale', tone: 'robots' },
+  { id: 'Cirque', emoji: '🎪', tagline: 'Sous le chapiteau, entre trac et amitié', tone: 'circus' },
+  { id: 'Mystère & détectives', emoji: '🔍', tagline: 'Indices, énigmes et enquête au clair de lune', tone: 'mystery' }
 ];
 
 export const AGE_MIN = 3;

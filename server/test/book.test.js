@@ -6,24 +6,35 @@ import { PAGE, MARGIN, BODY, fitText, layoutText, splitAtSentences, coverFit, sa
 import { localStory } from '../src/story/local.js';
 import { validateStory } from '../src/story/validate.js';
 
-const THEMES = ['Espace', 'Forêt magique', 'Pirates', 'Super-héros', 'Licornes', 'Dinosaures', 'Océan', 'Chevaliers & dragons', 'Savane'];
+const THEMES = ['Espace', 'Forêt magique', 'Pirates', 'Super-héros', 'Licornes', 'Dinosaures', 'Océan', 'Chevaliers & dragons', 'Savane', 'Robots & inventions', 'Cirque', 'Mystère & détectives'];
 
 async function fonts() {
   const doc = await PDFDocument.create();
   return loadFonts(doc);
 }
 
-test('chaque histoire locale est valide : 10 pages distinctes, sans répétition', () => {
+test('chaque histoire locale est valide pour chaque thème et chaque âge', () => {
   for (const theme of THEMES) {
-    for (const name of ['Lina', 'Jean-Baptiste', 'Éloïse']) {
-      const story = localStory({ name, theme });
-      const { ok, problems } = validateStory(story, { name, age: 8 });
-      assert.deepEqual(problems, [], `${theme}/${name}`);
-      assert.ok(ok);
-      assert.equal(new Set(story.pages.map((p) => p.text)).size, 10);
-      assert.ok(story.pages.every((p) => !p.text.includes('{name}') && !p.title.includes('{name}')));
+    for (const age of [4, 7, 11]) {
+      for (const name of ['Lina', 'Jean-Baptiste', 'Éloïse']) {
+        const story = localStory({ name, theme, age });
+        const { ok, problems } = validateStory(story, { name, age });
+        assert.deepEqual(problems, [], `${theme}/${age}/${name}`);
+        assert.ok(ok);
+        assert.equal(new Set(story.pages.map((p) => p.text)).size, 10);
+        assert.ok(story.pages.every((p) => !p.text.includes('{name}') && !p.title.includes('{name}') && p.scene));
+      }
     }
   }
+});
+
+test('les histoires sont adaptées à l’âge : plus longues pour les grands', () => {
+  const avg = (age) => {
+    const st = localStory({ name: 'Lina', theme: 'Pirates', age });
+    return st.pages.reduce((n, p) => n + p.text.split(/\s+/).length, 0) / 10;
+  };
+  assert.ok(avg(4) < avg(7) && avg(7) < avg(11), `${avg(4)} ${avg(7)} ${avg(11)}`);
+  assert.notEqual(localStory({ name: 'Lina', theme: 'Pirates', age: 4 }).title, localStory({ name: 'Lina', theme: 'Pirates', age: 11 }).title);
 });
 
 test('la validation rejette pages manquantes, trop courtes ou dupliquées', () => {

@@ -13,6 +13,9 @@ export function themeKey(theme = '') {
   if (t.includes('dino')) return 'dinos';
   if (t.includes('ocean') || t.includes('mer')) return 'ocean';
   if (t.includes('chevalier') || t.includes('dragon')) return 'knights';
+  if (t.includes('robot')) return 'robots';
+  if (t.includes('cirque')) return 'circus';
+  if (t.includes('mystere') || t.includes('detective')) return 'mystery';
   if (t.includes('savane') || t.includes('safari')) return 'safari';
   return 'forest';
 }
@@ -26,6 +29,9 @@ export const PALETTES = {
   dinos: { top: [0.99, 0.88, 0.7], bottom: [0.72, 0.88, 0.7], accent: [0.99, 0.78, 0.4] },
   ocean: { top: [0.62, 0.85, 0.95], bottom: [0.2, 0.42, 0.7], accent: [0.99, 0.9, 0.7] },
   knights: { top: [0.75, 0.82, 0.97], bottom: [0.82, 0.9, 0.78], accent: [0.99, 0.85, 0.45] },
+  robots: { top: [0.82, 0.9, 0.98], bottom: [0.75, 0.82, 0.95], accent: [0.99, 0.82, 0.45] },
+  circus: { top: [0.99, 0.8, 0.82], bottom: [0.99, 0.92, 0.75], accent: [0.99, 0.85, 0.4] },
+  mystery: { top: [0.22, 0.24, 0.45], bottom: [0.5, 0.45, 0.7], accent: [0.99, 0.88, 0.5] },
   safari: { top: [0.99, 0.8, 0.55], bottom: [0.95, 0.88, 0.6], accent: [1, 0.93, 0.7] }
 };
 
@@ -258,6 +264,64 @@ export function drawScene(page, box, theme, seed = 0) {
     poly([[dx - 0.02, 0.18], [dx + 0.02, 0.3], [dx + 0.05, 0.17]], [0.95, 0.6, 0.55]);
     circle(dx - 0.075, 0.21, 0.006, [0.2, 0.25, 0.3]);
     hill(0.0, 0.08, [0.55, 0.78, 0.55], rnd() * 3 + 2);
+  } else if (key === 'robots') {
+    const gear = (u, v, r, c) => {
+      circle(u, v, r, c);
+      for (let i = 0; i < 8; i++) {
+        const a = (Math.PI * 2 * i) / 8;
+        circle(u + (Math.cos(a) * r * S) / box.width * 1.15, v + (Math.sin(a) * r * S) / box.height * 1.15, r * 0.3, c);
+      }
+      circle(u, v, r * 0.4, mix(pal.top, pal.bottom, 0.5));
+    };
+    gear(0.14, 0.82, 0.06, [0.7, 0.75, 0.88]);
+    gear(0.26, 0.74, 0.04, [0.9, 0.7, 0.55]);
+    gear(0.86, 0.84, 0.05, [0.75, 0.8, 0.9]);
+    page.drawRectangle({ x: box.x, y: box.y, width: box.width, height: box.height * 0.14, color: col([0.62, 0.68, 0.84]) });
+    const rx = 0.35 + rnd() * 0.3;
+    page.drawRectangle({ x: X(rx - 0.1), y: Y(0.14), width: S * 0.2, height: S * 0.26, color: col([0.95, 0.96, 0.99]) });
+    page.drawRectangle({ x: X(rx - 0.12), y: Y(0.38), width: S * 0.24, height: S * 0.19, color: col([0.88, 0.9, 0.97]) });
+    circle(rx - 0.04, 0.48, 0.035, [0.45, 0.7, 0.95]);
+    circle(rx + 0.04, 0.48, 0.035, [0.45, 0.7, 0.95]);
+    poly([[rx - 0.005, 0.57], [rx - 0.005, 0.67], [rx + 0.005, 0.67], [rx + 0.005, 0.57]], [0.6, 0.65, 0.8]);
+    circle(rx, 0.68, 0.02, [0.95, 0.5, 0.5]);
+    circle(rx, 0.28, 0.035, [0.95, 0.5, 0.5]);
+    for (const dx of [-0.17, 0.17]) poly([[rx + dx - 0.015, 0.14 + 0.1], [rx + dx - 0.015, 0.34], [rx + dx + 0.015, 0.34], [rx + dx + 0.015, 0.24]], [0.8, 0.84, 0.94]);
+  } else if (key === 'circus') {
+    const cx = 0.3 + rnd() * 0.4;
+    page.drawRectangle({ x: box.x, y: box.y, width: box.width, height: box.height * 0.14, color: col([0.98, 0.88, 0.62]) });
+    const stripes = 6;
+    for (let i = 0; i < stripes; i++) {
+      const u0 = cx - 0.27 + (i * 0.54) / stripes;
+      const u1 = u0 + 0.54 / stripes;
+      const top = cx - 0.01 + (i * 0.02) / stripes * 0.6;
+      poly([[u0, 0.14], [u1, 0.14], [cx + 0.0 + (i + 1 - stripes / 2) * 0.004, 0.62], [cx + (i - stripes / 2) * 0.004, 0.62]], i % 2 ? [0.99, 0.97, 0.94] : [0.95, 0.4, 0.5]);
+    }
+    poly([[cx - 0.29, 0.14], [cx - 0.29, 0.42], [cx - 0.0, 0.62], [cx + 0.29, 0.42], [cx + 0.29, 0.14]], [0.95, 0.4, 0.5], 0.0);
+    poly([[cx - 0.04, 0.14], [cx - 0.04, 0.3], [cx, 0.34], [cx + 0.04, 0.3], [cx + 0.04, 0.14]], [0.55, 0.3, 0.45]);
+    poly([[cx, 0.62], [cx, 0.74], [cx + 0.07, 0.69]], pal.accent);
+    for (let i = 0; i < 10; i++) star(rnd(), 0.5 + rnd() * 0.45, 0.012 + rnd() * 0.012, pal.accent, 0.9);
+    const bx = [0.1, 0.88, 0.8];
+    bx.forEach((u, i) => {
+      circle(u, 0.52 + i * 0.1, 0.045, [[0.95, 0.4, 0.5], [0.45, 0.7, 0.95], [0.6, 0.85, 0.6]][i]);
+      poly([[u, 0.52 + i * 0.1 - 0.045], [u, 0.2], [u + 0.004, 0.2], [u + 0.004, 0.52 + i * 0.1 - 0.045]], [0.5, 0.5, 0.55]);
+    });
+  } else if (key === 'mystery') {
+    for (let i = 0; i < 30; i++) star(rnd(), 0.5 + rnd() * 0.5, 0.005 + rnd() * 0.009, white, 0.5 + rnd() * 0.5);
+    circle(0.8, 0.8, 0.09, [0.99, 0.96, 0.82]);
+    circle(0.77, 0.83, 0.02, [0.92, 0.89, 0.75]);
+    let u = 0;
+    while (u < 1) {
+      const w = 0.12 + rnd() * 0.08;
+      const h = 0.22 + rnd() * 0.18;
+      poly([[u, 0.06], [u, h], [u + w, h], [u + w, 0.06]], mix([0.3, 0.3, 0.55], [0.2, 0.2, 0.42], rnd()));
+      poly([[u - 0.01, h], [u + w / 2, h + 0.1], [u + w + 0.01, h]], [0.25, 0.22, 0.46]);
+      for (let k = 0; k < 2; k++) page.drawRectangle({ x: X(u + w * (0.2 + k * 0.4)), y: Y(h - 0.1), width: S * 0.035, height: S * 0.05, color: col(rnd() > 0.3 ? pal.accent : [0.3, 0.3, 0.5]) });
+      u += w + 0.01;
+    }
+    hill(0.0, 0.07, [0.22, 0.2, 0.42], rnd() * 3);
+    const lx = 0.3 + rnd() * 0.4;
+    page.drawCircle({ x: X(lx), y: Y(0.14), size: 0.07 * S, borderColor: col([0.99, 0.9, 0.6]), borderWidth: S * 0.012, color: col([0.7, 0.85, 0.95]), opacity: 0.35 });
+    poly([[lx + 0.045, 0.1], [lx + 0.1, 0.03], [lx + 0.115, 0.045], [lx + 0.06, 0.115]], [0.99, 0.9, 0.6]);
   } else {
     circle(0.78, 0.8, 0.12, [1, 0.88, 0.55], 0.95);
     hill(0.12, 0.08, [0.93, 0.74, 0.4], rnd() * 3);

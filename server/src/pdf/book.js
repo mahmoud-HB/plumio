@@ -144,29 +144,29 @@ async function drawCover(ctx, story, childName, imageBuf, photoBuf) {
     }
   }
 
-  // Titre : taille décroissante jusqu'à tenir sur 3 lignes maximum
+  // Titre et sous-titre doivent tenir entre l'illustration et la pastille : le titre réduit sa taille au besoin
   const title = sanitize(story.title);
+  const sub = sanitize(story.subtitle || '');
+  const subLayout = sub ? layoutText(sub, fonts.italic, 14, CONTENT_WIDTH - 60) : null;
+  const subLines = subLayout ? subLayout.lines.filter((l) => l !== null).slice(0, 2) : [];
+  const subHeight = subLines.length ? subLines.length * (subLayout.lineHeight) + 8 : 0;
+  const top = imgBox.y - 66;
+  const available = top - 112 - subHeight;
   let size = 40;
   let lines = wrapParagraph(title, fonts.title, size, CONTENT_WIDTH - 20);
-  while (lines.length > 3 && size > 26) {
+  while ((lines.length > 3 || lines.length * size * 1.15 > available + size * 0.4) && size > 22) {
     size -= 2;
     lines = wrapParagraph(title, fonts.title, size, CONTENT_WIDTH - 20);
   }
-  let y = imgBox.y - 66;
+  let y = top;
   for (const l of lines.slice(0, 3)) {
     drawCentered(page, l, fonts.title, size, cx, y, COLORS.plum);
     y -= size * 1.15;
   }
-
-  const sub = sanitize(story.subtitle || '');
-  if (sub) {
-    const subLayout = layoutText(sub, fonts.italic, 14, CONTENT_WIDTH - 60);
-    for (const l of subLayout.lines.slice(0, 2)) {
-      if (l === null) continue;
-      y -= 4;
-      drawCentered(page, l, fonts.italic, 14, cx, y - 10, COLORS.ink);
-      y -= subLayout.lineHeight - 4;
-    }
+  for (const l of subLines) {
+    y -= 4;
+    drawCentered(page, l, fonts.italic, 14, cx, y - 10, COLORS.ink);
+    y -= subLayout.lineHeight - 4;
   }
 
   const pill = `Une histoire pour ${sanitize(childName)}`;
