@@ -1,6 +1,9 @@
-import { LOCAL_STORIES } from './local-stories.js';
+import { LOCAL_STORIES as BASE } from './local-stories.js';
+import { MORE_STORIES } from './local-stories-more.js';
 import { themeKey } from '../pdf/scenes.js';
 import { PAGE_COUNT } from './validate.js';
+
+const LOCAL_STORIES = { ...BASE, ...MORE_STORIES };
 
 const typo = (s) => s.replace(/(\p{L})'(\p{L})/gu, '$1\u2019$2');
 

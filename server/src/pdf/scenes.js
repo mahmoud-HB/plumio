@@ -10,6 +10,10 @@ export function themeKey(theme = '') {
   if (t.includes('pirate')) return 'pirates';
   if (t.includes('heros') || t.includes('hero')) return 'heroes';
   if (t.includes('licorne')) return 'unicorns';
+  if (t.includes('dino')) return 'dinos';
+  if (t.includes('ocean') || t.includes('mer')) return 'ocean';
+  if (t.includes('chevalier') || t.includes('dragon')) return 'knights';
+  if (t.includes('savane') || t.includes('safari')) return 'safari';
   return 'forest';
 }
 
@@ -18,7 +22,11 @@ export const PALETTES = {
   forest: { top: [0.78, 0.9, 0.9], bottom: [0.86, 0.95, 0.78], accent: [0.99, 0.9, 0.6] },
   pirates: { top: [1, 0.86, 0.78], bottom: [0.7, 0.85, 0.95], accent: [0.99, 0.78, 0.45] },
   heroes: { top: [0.99, 0.72, 0.68], bottom: [0.6, 0.62, 0.9], accent: [0.99, 0.88, 0.45] },
-  unicorns: { top: [0.84, 0.8, 0.97], bottom: [0.99, 0.84, 0.9], accent: [1, 0.92, 0.7] }
+  unicorns: { top: [0.84, 0.8, 0.97], bottom: [0.99, 0.84, 0.9], accent: [1, 0.92, 0.7] },
+  dinos: { top: [0.99, 0.88, 0.7], bottom: [0.72, 0.88, 0.7], accent: [0.99, 0.78, 0.4] },
+  ocean: { top: [0.62, 0.85, 0.95], bottom: [0.2, 0.42, 0.7], accent: [0.99, 0.9, 0.7] },
+  knights: { top: [0.75, 0.82, 0.97], bottom: [0.82, 0.9, 0.78], accent: [0.99, 0.85, 0.45] },
+  safari: { top: [0.99, 0.8, 0.55], bottom: [0.95, 0.88, 0.6], accent: [1, 0.93, 0.7] }
 };
 
 function makeRng(seed) {
@@ -153,7 +161,7 @@ export function drawScene(page, box, theme, seed = 0) {
     circle(fx + 0.04, 0.6, 0.035, [0.99, 0.84, 0.72]);
     poly([[fx, 0.52], [fx + 0.06, 0.6], [fx + 0.09, 0.56], [fx + 0.03, 0.48]], [0.3, 0.45, 0.85]);
     star(fx + 0.05, 0.56, 0.018, pal.accent);
-  } else {
+  } else if (key === 'unicorns') {
     const rainbow = [[0.96, 0.5, 0.55], [0.99, 0.75, 0.45], [0.99, 0.93, 0.55], [0.6, 0.85, 0.6], [0.5, 0.75, 0.95], [0.75, 0.6, 0.95]];
     const cx = 0.3 + rnd() * 0.4;
     rainbow.forEach((c, i) => {
@@ -176,5 +184,98 @@ export function drawScene(page, box, theme, seed = 0) {
     poly([[ux + 0.125, 0.4], [ux + 0.135, 0.5], [ux + 0.145, 0.4]], pal.accent);
     for (const dx of [-0.06, -0.02, 0.03, 0.07]) poly([[ux + dx, 0.22], [ux + dx, 0.1], [ux + dx + 0.015, 0.1], [ux + dx + 0.015, 0.22]], [0.96, 0.95, 0.99]);
     poly([[ux - 0.08, 0.27], [ux - 0.16, 0.22], [ux - 0.12, 0.17], [ux - 0.07, 0.22]], [0.95, 0.6, 0.78]);
+  } else if (key === 'dinos') {
+    circle(0.8, 0.8, 0.09, pal.accent, 0.95);
+    // volcan
+    const vx = 0.22 + rnd() * 0.15;
+    poly([[vx - 0.22, 0.1], [vx - 0.04, 0.5], [vx + 0.04, 0.5], [vx + 0.22, 0.1]], [0.55, 0.4, 0.38]);
+    poly([[vx - 0.04, 0.5], [vx, 0.46], [vx + 0.04, 0.5]], [0.95, 0.45, 0.3]);
+    ellipse(vx, 0.58, 0.05, 0.035, [0.85, 0.82, 0.8], 0.7);
+    ellipse(vx + 0.05, 0.66, 0.06, 0.04, [0.88, 0.85, 0.83], 0.6);
+    hill(0.1, 0.1, [0.62, 0.8, 0.52], rnd() * 3);
+    // fougères
+    for (let i = 0; i < 5; i++) {
+      const fx = 0.05 + i * 0.22 + rnd() * 0.06;
+      for (let k = 0; k < 5; k++) {
+        const a = -0.9 + k * 0.45;
+        poly([[fx, 0.04], [fx + Math.sin(a) * 0.14, 0.04 + Math.cos(a) * 0.2], [fx + Math.sin(a) * 0.14 + 0.015, 0.04 + Math.cos(a) * 0.2 - 0.02]], [0.3, 0.6, 0.38]);
+      }
+    }
+    // diplodocus
+    const dx = 0.5 + rnd() * 0.2;
+    ellipse(dx, 0.22, 0.12, 0.065, [0.55, 0.75, 0.5]);
+    poly([[dx - 0.1, 0.24], [dx - 0.2, 0.2], [dx - 0.1, 0.2]], [0.55, 0.75, 0.5]);
+    poly([[dx + 0.07, 0.25], [dx + 0.11, 0.55], [dx + 0.135, 0.55], [dx + 0.115, 0.25]], [0.55, 0.75, 0.5]);
+    ellipse(dx + 0.14, 0.56, 0.035, 0.022, [0.55, 0.75, 0.5]);
+    circle(dx + 0.15, 0.565, 0.006, [0.2, 0.25, 0.2]);
+    for (const o of [-0.07, -0.02, 0.04, 0.09]) poly([[dx + o, 0.2], [dx + o, 0.08], [dx + o + 0.02, 0.08], [dx + o + 0.02, 0.2]], [0.45, 0.66, 0.42]);
+  } else if (key === 'ocean') {
+    circle(0.8, 0.88, 0.08, pal.accent, 0.8);
+    for (let i = 0; i < 5; i++) {
+      const rx = 0.1 + i * 0.2;
+      page.drawRectangle({ x: X(rx), y: Y(0.55 + rnd() * 0.2), width: S * 0.004, height: S * 0.5, color: col([0.9, 0.97, 1]), opacity: 0.25 });
+    }
+    // bulles
+    for (let i = 0; i < 20; i++) circle(rnd(), 0.15 + rnd() * 0.8, 0.008 + rnd() * 0.02, [1, 1, 1], 0.35);
+    // sable + corail
+    hill(0.0, 0.08, [0.93, 0.85, 0.65], rnd() * 3);
+    const coral = (u, h, c) => {
+      poly([[u - 0.01, 0.04], [u - 0.01, 0.04 + h], [u + 0.01, 0.04 + h], [u + 0.01, 0.04]], c);
+      poly([[u, 0.04 + h * 0.4], [u + 0.07, 0.04 + h * 0.8], [u + 0.08, 0.04 + h * 0.7], [u + 0.015, 0.04 + h * 0.3]], c);
+      poly([[u, 0.04 + h * 0.5], [u - 0.07, 0.04 + h * 0.85], [u - 0.08, 0.04 + h * 0.75], [u - 0.015, 0.04 + h * 0.4]], c);
+    };
+    coral(0.12, 0.28, [0.96, 0.5, 0.55]);
+    coral(0.82, 0.3, [0.98, 0.65, 0.4]);
+    coral(0.6, 0.18, [0.85, 0.55, 0.85]);
+    // poisson
+    const fx = 0.3 + rnd() * 0.3;
+    const fy = 0.45 + rnd() * 0.2;
+    ellipse(fx, fy, 0.09, 0.05, [0.99, 0.72, 0.35]);
+    poly([[fx - 0.08, fy], [fx - 0.15, fy + 0.05], [fx - 0.15, fy - 0.05]], [0.99, 0.72, 0.35]);
+    circle(fx + 0.05, fy + 0.01, 0.01, [0.2, 0.25, 0.4]);
+    poly([[fx - 0.01, fy + 0.045], [fx + 0.02, fy + 0.09], [fx + 0.04, fy + 0.04]], [0.96, 0.5, 0.4]);
+    // petite perle
+    circle(0.5 + rnd() * 0.15, 0.1, 0.022, [1, 0.97, 0.92]);
+  } else if (key === 'knights') {
+    circle(0.82, 0.82, 0.08, pal.accent, 0.95);
+    ellipse(0.25, 0.8, 0.1, 0.03, white, 0.85);
+    hill(0.2, 0.12, [0.66, 0.84, 0.66], rnd() * 3);
+    // château
+    const cx = 0.3 + rnd() * 0.3;
+    const stone = [0.78, 0.76, 0.82];
+    poly([[cx - 0.2, 0.18], [cx - 0.2, 0.46], [cx + 0.2, 0.46], [cx + 0.2, 0.18]], stone);
+    for (const t of [-0.2, 0.2]) {
+      poly([[cx + t - 0.05, 0.18], [cx + t - 0.05, 0.62], [cx + t + 0.05, 0.62], [cx + t + 0.05, 0.18]], [0.7, 0.68, 0.76]);
+      poly([[cx + t - 0.065, 0.62], [cx + t, 0.76], [cx + t + 0.065, 0.62]], [0.86, 0.4, 0.5]);
+    }
+    for (let i = 0; i < 5; i++) page.drawRectangle({ x: X(cx - 0.18 + i * 0.09), y: Y(0.46), width: S * 0.04, height: S * 0.03, color: col(stone) });
+    poly([[cx - 0.04, 0.18], [cx - 0.04, 0.32], [cx, 0.36], [cx + 0.04, 0.32], [cx + 0.04, 0.18]], [0.45, 0.33, 0.4]);
+    // dragon vert
+    const dx = 0.7 + rnd() * 0.12;
+    ellipse(dx, 0.14, 0.09, 0.05, [0.5, 0.78, 0.55]);
+    ellipse(dx - 0.07, 0.2, 0.04, 0.03, [0.5, 0.78, 0.55]);
+    poly([[dx + 0.06, 0.14], [dx + 0.16, 0.1], [dx + 0.06, 0.09]], [0.5, 0.78, 0.55]);
+    poly([[dx - 0.02, 0.18], [dx + 0.02, 0.3], [dx + 0.05, 0.17]], [0.95, 0.6, 0.55]);
+    circle(dx - 0.075, 0.21, 0.006, [0.2, 0.25, 0.3]);
+    hill(0.0, 0.08, [0.55, 0.78, 0.55], rnd() * 3 + 2);
+  } else {
+    circle(0.78, 0.8, 0.12, [1, 0.88, 0.55], 0.95);
+    hill(0.12, 0.08, [0.93, 0.74, 0.4], rnd() * 3);
+    // acacia
+    const ax = 0.15 + rnd() * 0.2;
+    poly([[ax - 0.012, 0.1], [ax - 0.004, 0.42], [ax + 0.012, 0.42], [ax + 0.016, 0.1]], [0.45, 0.33, 0.25]);
+    ellipse(ax, 0.46, 0.17, 0.045, [0.45, 0.66, 0.35]);
+    ellipse(ax + 0.08, 0.5, 0.1, 0.03, [0.5, 0.72, 0.4]);
+    // girafe
+    const gx = 0.55 + rnd() * 0.2;
+    const gold = [0.97, 0.76, 0.36];
+    ellipse(gx, 0.28, 0.09, 0.055, gold);
+    for (const o of [-0.06, -0.02, 0.03, 0.07]) poly([[gx + o, 0.26], [gx + o, 0.08], [gx + o + 0.014, 0.08], [gx + o + 0.014, 0.26]], gold);
+    poly([[gx + 0.05, 0.3], [gx + 0.09, 0.7], [gx + 0.115, 0.7], [gx + 0.095, 0.3]], gold);
+    ellipse(gx + 0.12, 0.72, 0.035, 0.022, gold);
+    circle(gx + 0.13, 0.73, 0.006, [0.25, 0.2, 0.18]);
+    for (const [u, v] of [[-0.03, 0.29], [0.02, 0.26], [0.09, 0.5], [0.095, 0.62], [0.01, 0.31]]) circle(gx + u, v, 0.012, [0.7, 0.45, 0.2]);
+    hill(0.0, 0.07, [0.86, 0.66, 0.34], rnd() * 3 + 1);
+    for (let i = 0; i < 10; i++) circle(rnd(), 0.62 + rnd() * 0.3, 0.004, [1, 1, 1], 0.7);
   }
 }

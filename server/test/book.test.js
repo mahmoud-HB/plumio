@@ -6,7 +6,7 @@ import { PAGE, MARGIN, BODY, fitText, layoutText, splitAtSentences, coverFit, sa
 import { localStory } from '../src/story/local.js';
 import { validateStory } from '../src/story/validate.js';
 
-const THEMES = ['Espace', 'Forêt magique', 'Pirates', 'Super-héros', 'Licornes'];
+const THEMES = ['Espace', 'Forêt magique', 'Pirates', 'Super-héros', 'Licornes', 'Dinosaures', 'Océan', 'Chevaliers & dragons', 'Savane'];
 
 async function fonts() {
   const doc = await PDFDocument.create();

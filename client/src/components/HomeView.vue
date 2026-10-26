@@ -61,7 +61,7 @@ const perks = [
     </section>
 
     <section class="section">
-      <h2 class="section-title">Cinq univers à explorer</h2>
+      <h2 class="section-title">Neuf univers à explorer</h2>
       <div class="theme-strip">
         <button v-for="t in THEMES" :key="t.id" class="theme-chip" :class="`tone-${t.tone}`" @click="$emit('start', t.id)">
           <span class="theme-emoji">{{ t.emoji }}</span>
