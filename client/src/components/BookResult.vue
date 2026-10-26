@@ -46,12 +46,12 @@ const audioState = ref('idle');
 const audioProgress = ref(0);
 const voices = ref([]);
 const voiceURI = ref('');
-const rate = ref(0.95);
+const rate = ref(0.85);
 let narrator = null;
 
 function loadVoices() {
   voices.value = frenchVoices();
-  if (!voiceURI.value && voices.value.length) voiceURI.value = (voices.value.find((v) => v.default) ?? voices.value[0]).voiceURI;
+  if (!voiceURI.value && voices.value.length) voiceURI.value = voices.value[0].voiceURI;
   narrator?.set({ voiceURI: voiceURI.value });
 }
 
@@ -142,13 +142,13 @@ onBeforeUnmount(() => {
             <div class="audio-bar" role="progressbar" aria-label="Progression de la lecture" :aria-valuenow="Math.round(audioProgress * 100)" aria-valuemin="0" aria-valuemax="100"><span :style="{ width: audioProgress * 100 + '%' }"></span></div>
             <div class="audio-options">
               <label v-if="voices.length > 1">Voix
-                <select v-model="voiceURI" @change="onVoice"><option v-for="v in voices" :key="v.voiceURI" :value="v.voiceURI">{{ v.name }}</option></select>
+                <select v-model="voiceURI" @change="onVoice"><option v-for="(v, i) in voices" :key="v.voiceURI" :value="v.voiceURI">{{ v.name }}{{ i === 0 ? ' (recommandée)' : '' }}</option></select>
               </label>
-              <label>Vitesse
-                <select v-model="rate" @change="onRate"><option :value="0.8">Lente</option><option :value="0.95">Normale</option><option :value="1.1">Rapide</option></select>
+              <label>Rythme
+                <select v-model="rate" @change="onRate"><option :value="0.75">Très douce</option><option :value="0.85">Histoire du soir</option><option :value="0.95">Normale</option></select>
               </label>
             </div>
-            <p class="field-hint">Lecture à voix haute par ton appareil, sans fichier audio à télécharger. La qualité de la voix dépend de ton navigateur.</p>
+            <p class="field-hint">Voix douce avec pauses de conteur, lue par ton appareil (aucun fichier à télécharger). Pour la plus belle voix : Edge (voix « Natural »), Safari ou un iPhone/Mac avec une voix française « améliorée » installée.</p>
           </template>
           <p v-else class="field-hint">La lecture audio n’est pas disponible sur ce navigateur. Essaie Chrome, Edge ou Safari.</p>
         </div>
