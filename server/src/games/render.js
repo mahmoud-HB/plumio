@@ -22,10 +22,11 @@ const AREA = { x: 56, top: 232, w: PAGE.width - 112, h: 520 };
 class Canvas {
   constructor(page, fonts) { this.page = page; this.f = fonts; }
   y(top) { return PAGE.height - top; }
-  text(str, x, top, { font = 'body', size = 12, color = C.ink, align = 'left', opacity = 1 } = {}) {
+  text(str, x, top, { font = 'body', size = 12, color = C.ink, align = 'left', opacity = 1, maxW = 0 } = {}) {
     const s = sanitize(str);
     if (!s) return 0;
     const font_ = this.f[font];
+    if (maxW) size = Math.min(size, size * maxW / font_.widthOfTextAtSize(s, size));
     const w = font_.widthOfTextAtSize(s, size);
     const px = align === 'center' ? x - w / 2 : align === 'right' ? x - w : x;
     this.page.drawText(s, { x: px, y: this.y(top + size * 0.8), size, font: font_, color, opacity });
@@ -62,6 +63,8 @@ class Canvas {
 const STAR_PATH = 'M 0 -10 L 3 -3 L 10 -3 L 4.5 2 L 6.5 9 L 0 5 L -6.5 9 L -4.5 2 L -10 -3 L -3 -3 Z';
 const HEART_PATH = 'M 0 8 C -12 -1 -9 -10 -4 -10 C -2 -10 0 -8 0 -6 C 0 -8 2 -10 4 -10 C 9 -10 12 -1 0 8 Z';
 
+// « de Léa » / « d’Élodie »
+const de = (n) => (/^[AEIOUYÀÂÄÉÈÊËÎÏÔÖÙÛÜH]/i.test(n) ? `d’${n}` : `de ${n}`);
 const sanitizeName = (name) => P.toGridWord(name);
 const hashOf = (s) => P.hashSeed(String(s));
 
@@ -135,7 +138,7 @@ function drawColoring(cv, ctx) {
   }
   const bannerTop = AREA.top + AREA.h - 70;
   cv.rect(AREA.x + 40, bannerTop, AREA.w - 80, 56, { fill: C.white, stroke: C.plum, sw: 2.5, r: 28 });
-  cv.text(`Le dessin de ${ctx.displayName}`, PAGE.width / 2, bannerTop + 14, { font: 'title', size: 24, color: C.plum, align: 'center' });
+  cv.text(`Le dessin ${de(ctx.displayName)}`, PAGE.width / 2, bannerTop + 14, { font: 'title', size: 24, color: C.plum, align: 'center', maxW: AREA.w - 120 });
 }
 
 function drawDots(cv, ctx, solution) {
@@ -310,6 +313,8 @@ function drawSudoku(cv, ctx, solution) {
 // Messages en boîtes de lettres : renvoie la hauteur utilisée.
 function layoutLetters(cv, text, top, cellW, drawCell) {
   const words = text.split(' ');
+  const longest = Math.max(...words.map((w) => w.length));
+  cellW = Math.min(cellW, Math.floor((AREA.w + 8) / longest) - 3);
   const per = Math.floor((AREA.w + 8) / (cellW + 3));
   const rows = [[]]; let used = 0;
   words.forEach((w) => {
@@ -342,7 +347,7 @@ function drawCode(cv, ctx, solution) {
   });
   cv.text('Remplace chaque nombre par sa lettre pour lire le message !', PAGE.width / 2, AREA.top + 96, { font: 'label', size: 11, color: C.muted, align: 'center' });
   layoutLetters(cv, msgClean, AREA.top + 124, 26, (ch, x, t, w) => {
-    cv.text(String(ch.charCodeAt(0) - 64), x + w / 2, t + 2, { font: 'title', size: 14, color: C.plum, align: 'center' });
+    cv.text(String(ch.charCodeAt(0) - 64), x + w / 2, t + 2, { font: 'title', size: Math.min(14, w * 0.54), color: C.plum, align: 'center' });
     cv.rect(x, t + 26, w, w, { fill: C.white, stroke: C.muted, sw: 1.2, r: 5 });
     if (solution) cv.text(ch, x + w / 2, t + 26 + w * 0.14, { font: 'title', size: w * 0.65, color: C.plum, align: 'center' });
   });
@@ -388,7 +393,7 @@ function drawCaesar(cv, ctx, solution) {
   });
   cv.text('Ligne du haut : lettre vraie · ligne du bas : lettre codée', PAGE.width / 2, AREA.top + 172, { font: 'label', size: 10, color: C.muted, align: 'center' });
   layoutLetters(cv, coded, AREA.top + 204, 26, (ch, x, t, w) => {
-    cv.text(ch, x + w / 2, t + 3, { font: 'title', size: 18, color: C.plum, align: 'center' });
+    cv.text(ch, x + w / 2, t + 3, { font: 'title', size: Math.min(18, w * 0.69), color: C.plum, align: 'center' });
     cv.rect(x, t + 26, w, w, { fill: C.white, stroke: C.muted, sw: 1.2, r: 5 });
   });
   // Réponses (solution) rendues dans les cases : second passage
@@ -595,7 +600,7 @@ function drawBattle(cv, ctx) {
   grid(AREA.x, AREA.top + 34 + gs + 56, 'La flotte adverse (mes tirs)');
   const px = AREA.x + 20 + gs + 26; const pw = AREA.w - (20 + gs + 26);
   cv.rect(px, AREA.top + 4, pw, 300, { fill: C.white, stroke: C.lavender, sw: 1.6, r: 14 });
-  cv.text(`Amiral ${ctx.displayName}`, px + pw / 2, AREA.top + 16, { font: 'title', size: 15, color: C.plum, align: 'center' });
+  cv.text(`Amiral ${ctx.displayName}`, px + pw / 2, AREA.top + 16, { font: 'title', size: 15, color: C.plum, align: 'center', maxW: pw - 20 });
   const fleet = [['Porte-avions', 5], ['Croiseur', 4], ['Sous-marin', 3], ['Torpilleur', 3], ['Patrouilleur', 2]];
   fleet.forEach(([nm, len], i) => {
     const y = AREA.top + 50 + i * 36;
@@ -678,20 +683,20 @@ function drawColumn(cv, ctx, solution) {
 // ---------- Définition des jeux : titre, mission personnalisée, rendu ----------
 const RENDERERS = {
   suite: { solution: true, mission: (c) => `${c.displayName} est un as de la logique : quels sont les deux derniers dessins de chaque rangée ?`, draw: drawPattern },
-  pixel: { solution: true, mission: (c) => `Colorie chaque case selon son numéro, et découvre le dessin surprise de ${c.displayName} !`, draw: drawPixel },
+  pixel: { solution: true, mission: (c) => `Colorie chaque case selon son numéro, et découvre le dessin surprise ${de(c.displayName)} !`, draw: drawPixel },
   trace: { solution: false, mission: (c) => `${c.displayName} suit les chemins avec son crayon, sans sortir de la ligne : un vrai champion de l’écriture !`, draw: drawTrace },
   oie: { solution: false, mission: (c) => `${c.displayName} lance l’aventure ! Qui atteindra ${c.data.goal} en premier ?`, draw: drawGoose },
-  suitenombres: { solution: true, mission: (c) => `Les nombres de ${c.displayName} jouent à cache-cache : retrouve les deux nombres cachés de chaque suite.`, draw: drawNumberSeq },
+  suitenombres: { solution: true, mission: (c) => `Les nombres ${de(c.displayName)} jouent à cache-cache : retrouve les deux nombres cachés de chaque suite.`, draw: drawNumberSeq },
   voyelles: { solution: true, mission: (c) => `Oups, les voyelles se sont envolées ! ${c.displayName} doit les remettre dans les mots de l’univers « ${c.data.label} ».`, draw: drawVowels },
   bataille: { solution: false, mission: (c) => `Amiral ${c.displayName}, à vous de couler la flotte adverse ! Imprimez deux exemplaires pour jouer à deux.`, draw: drawBattle },
   logique: { solution: true, mission: (c) => `${c.displayName} met ses talents de calcul à l’épreuve : complète les carrés magiques et les pyramides.`, draw: drawLogic },
-  colonne: { solution: true, mission: (c) => `Place chaque mot de l’univers « ${c.data.label} » pour faire apparaître un mot mystère, celui de ${c.displayName} !`, draw: drawColumn },
+  colonne: { solution: true, mission: (c) => `Place chaque mot de l’univers « ${c.data.label} » pour faire apparaître un mot mystère, celui ${de(c.displayName)} !`, draw: drawColumn },
   coloriage: { solution: false, mission: (c) => `${c.displayName}, prends tes crayons préférés : ce dessin attend tes plus belles couleurs !`, draw: drawColoring },
   points: { solution: true, mission: (c) => `Relie les points dans l’ordre pour aider ${c.displayName} à découvrir la surprise cachée.`, draw: drawDots },
   labyrinthe: { solution: true, mission: (c) => `Aide ${c.displayName} à traverser le labyrinthe pour rejoindre ${c.data.goal}.`, draw: drawMaze },
   compte: { solution: true, mission: (c) => `${c.displayName} sait bien compter ! Combien y a-t-il d’étoiles, de cœurs et de ballons ?`, draw: drawCount },
-  prenom: { solution: false, mission: (c) => `Voici le prénom de ${c.displayName}. Repasse dessus, puis écris-le tout seul !`, draw: drawName },
-  motsmeles: { solution: true, mission: (c) => `${c.displayName}, retrouve ton prénom et les mots de l’univers « ${c.data.label} » cachés dans la grille.`, draw: drawWordSearch },
+  prenom: { solution: false, mission: (c) => `Voici le prénom ${de(c.displayName)}. Repasse dessus, puis écris-le tout seul !`, draw: drawName },
+  motsmeles: { solution: true, mission: (c) => `${c.displayName}, retrouve ${c.name.length >= 3 && c.name.length <= (c.band === 'moyens' ? 10 : 14) ? 'ton prénom et ' : ''}les mots de l’univers « ${c.data.label} » cachés dans la grille.`, draw: drawWordSearch },
   sudoku: { solution: true, mission: (c) => `Chaque case a son chiffre : ${c.displayName}, à toi de trouver la logique de cette grille !`, draw: drawSudoku },
   code: { solution: true, mission: (c) => `Un message secret est adressé à ${c.displayName}. Utilise la table pour le décoder !`, draw: drawCode },
   calculs: { solution: true, mission: (c) => `${c.displayName} relève le défi : résous les 12 calculs pour gagner son diplôme de calcul mental.`, draw: drawArithmetic },
