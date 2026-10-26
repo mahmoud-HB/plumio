@@ -10,7 +10,11 @@ export const THEMES = [
   { id: 'Savane', emoji: '🦒', tagline: 'Safari au milieu des animaux d’Afrique', tone: 'safari' },
   { id: 'Robots & inventions', emoji: '🤖', tagline: 'Un atelier, un robot ami et une invention géniale', tone: 'robots' },
   { id: 'Cirque', emoji: '🎪', tagline: 'Sous le chapiteau, entre trac et amitié', tone: 'circus' },
-  { id: 'Mystère & détectives', emoji: '🔍', tagline: 'Indices, énigmes et enquête au clair de lune', tone: 'mystery' }
+  { id: 'Mystère & détectives', emoji: '🔍', tagline: 'Indices, énigmes et enquête au clair de lune', tone: 'mystery' },
+  { id: 'Fées & lutins', emoji: '🧚', tagline: 'Poussière d’étoiles et magie dans la forêt enchantée', tone: 'fairies' },
+  { id: 'Banquise', emoji: '🐧', tagline: 'Pingouins, aurores boréales et grand froid', tone: 'polar' },
+  { id: 'Sports & champions', emoji: '⚽', tagline: 'Un tournoi, une équipe et l’esprit sportif', tone: 'sports' },
+  { id: 'Pâtisserie & cuisine', emoji: '🧁', tagline: 'Un gâteau à sauver et des recettes à partager', tone: 'bakery' }
 ];
 
 export const AGE_MIN = 3;

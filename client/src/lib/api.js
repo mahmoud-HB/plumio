@@ -52,3 +52,15 @@ export async function fetchGamesPdf({ name, age, theme, gameId = 'all', variant 
   }
   return res.blob();
 }
+
+export async function fetchGamesCatalog() {
+  let res;
+  try {
+    res = await fetch('/api/games/catalog');
+  } catch {
+    throw new Error('Impossible de charger la liste des jeux. Vérifie ta connexion.');
+  }
+  const data = await res.json().catch(() => null);
+  if (!res.ok || !data?.ok) throw new Error('Impossible de charger la liste des jeux. Réessaie dans un instant.');
+  return data;
+}

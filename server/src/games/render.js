@@ -2,7 +2,7 @@
 import { PDFDocument, rgb } from 'pdf-lib';
 import { PAGE, sanitize, wrapParagraph } from '../pdf/layout.js';
 import { loadFonts, PALETTES } from '../pdf/book.js';
-import { BANDS, GAMES, bandOf, findGame, gamesFor, themeData } from './catalog.js';
+import { ALL_WORDS, BANDS, GAMES, bandOf, findGame, gamesFor, themeData } from './catalog.js';
 import * as P from './puzzles.js';
 
 const C = {
@@ -419,8 +419,273 @@ function drawAnagrams(cv, ctx, solution) {
   });
 }
 
+// ---------- Nouveaux jeux ----------
+const SHAPE_COLORS = [rgb(0.96, 0.78, 0.3), rgb(0.95, 0.55, 0.65), rgb(0.5, 0.72, 0.95), rgb(0.55, 0.8, 0.6)];
+
+function shape(cv, type, x, y, r) {
+  const col = SHAPE_COLORS[type % SHAPE_COLORS.length];
+  if (type === 0) cv.path(STAR_PATH, x, y, r / 8, { fill: col, stroke: rgb(0.85, 0.65, 0.2), sw: 0.8 });
+  else if (type === 1) cv.path(HEART_PATH, x, y + r * 0.1, r / 9, { fill: col });
+  else if (type === 2) cv.circle(x, y, r * 0.75, { fill: col });
+  else cv.rect(x - r * 0.7, y - r * 0.7, r * 1.4, r * 1.4, { fill: col, r: 4 });
+}
+
+function drawPattern(cv, ctx, solution) {
+  const rnd = P.makeRng(`${ctx.seed}|pat`);
+  const motifs = [[0, 1], [0, 0, 1], [0, 1, 2], [0, 1, 1], [0, 1, 2, 3]];
+  const rowH = 80;
+  const r = 20;
+  for (let row = 0; row < 6; row++) {
+    const motif = motifs[row % motifs.length].map((v) => (v + Math.floor(rnd() * 4)) % 4);
+    const len = 8;
+    const t = AREA.top + row * rowH;
+    const slot = (AREA.w - 20) / len;
+    for (let i = 0; i < len; i++) {
+      const x = AREA.x + 10 + slot * (i + 0.5);
+      const hide = i >= len - 2;
+      if (hide) {
+        cv.rect(x - 24, t + 6, 48, 48, { stroke: C.plum, sw: 1.6, r: 12, fill: C.white });
+        if (solution) shape(cv, motif[i % motif.length], x, t + 30, r);
+      } else shape(cv, motif[i % motif.length], x, t + 30, r);
+    }
+  }
+  cv.text('Regarde bien, puis dessine les deux derniers dessins de chaque rangée.', PAGE.width / 2, AREA.top + 6 * rowH + 6, { font: 'label', size: 11, color: C.muted, align: 'center' });
+}
+
+const BITMAPS = {
+  heart: { rows: ['0000000000', '0110000110', '1221001221', '1222112221', '1222222221', '0122222210', '0012222100', '0001221000', '0000110000', '0000000000'], colors: [['1', 'rouge', rgb(0.85, 0.2, 0.3)], ['2', 'rose', rgb(0.97, 0.6, 0.72)]] },
+  star: { rows: ['0000110000', '0000110000', '0001221000', '1112222111', '0122222210', '0012222100', '0012222100', '0122112210', '0121001210', '0110000110'], colors: [['1', 'orange', rgb(0.96, 0.6, 0.2)], ['2', 'jaune', rgb(0.99, 0.88, 0.35)]] },
+  house: { rows: ['0000110000', '0001111000', '0011111100', '0111111110', '1111111111', '0222222220', '0232222320', '0222332220', '0222332220', '0000000000'], colors: [['1', 'rouge', rgb(0.85, 0.3, 0.3)], ['2', 'jaune', rgb(0.99, 0.88, 0.5)], ['3', 'bleu', rgb(0.45, 0.7, 0.93)]] }
+};
+
+function drawPixel(cv, ctx, solution) {
+  const key = ['heart', 'star', 'house'][hashOf(ctx.name + ctx.variant) % 3];
+  const bm = BITMAPS[key];
+  const cell = 40;
+  const gs = cell * 10;
+  const ox = PAGE.width / 2 - gs / 2;
+  const top = AREA.top + 4;
+  const colorOf = (d) => bm.colors.find((c) => c[0] === d)?.[2];
+  bm.rows.forEach((row, r) => [...row].forEach((d, c) => {
+    const x = ox + c * cell; const y = top + r * cell;
+    cv.rect(x, y, cell, cell, { fill: solution && d !== '0' ? colorOf(d) : C.white, stroke: C.muted, sw: 0.8 });
+    if (d !== '0' && !solution) cv.text(d, x + cell / 2, y + cell * 0.2, { font: 'title', size: 18, color: C.plum, align: 'center' });
+  }));
+  const ly = top + gs + 24;
+  const lw = bm.colors.length * 120;
+  bm.colors.forEach(([d, label, color], i) => {
+    const x = PAGE.width / 2 - lw / 2 + i * 120;
+    cv.rect(x, ly, 28, 28, { fill: color, stroke: C.ink, sw: 1.2, r: 6 });
+    cv.text(`${d} = ${label}`, x + 36, ly + 6, { font: 'label', size: 13 });
+  });
+  cv.text('Les cases sans numéro restent blanches.', PAGE.width / 2, ly + 44, { font: 'label', size: 10.5, color: C.muted, align: 'center' });
+}
+
+function drawTrace(cv, ctx) {
+  const paths = [
+    (u) => 0.5 + 0.38 * Math.sin(u * Math.PI * 4),
+    (u) => 0.1 + 0.8 * Math.abs(((u * 8) % 2) - 1),
+    (u) => Math.abs(Math.sin(u * Math.PI * 4)) * 0.9 + 0.05,
+    (u) => 0.5 + 0.4 * Math.sin(u * Math.PI * 6) * (1 - u * 0.4)
+  ];
+  const rowH = 118;
+  paths.forEach((fn, k) => {
+    const t = AREA.top + k * rowH;
+    const x0 = AREA.x + 40; const x1 = AREA.x + AREA.w - 40;
+    cv.rect(AREA.x, t, AREA.w, rowH - 14, { fill: C.white, stroke: C.lavender, sw: 1.5, r: 14 });
+    const steps = 160;
+    let prev = null;
+    for (let i = 0; i <= steps; i++) {
+      const u = i / steps;
+      const x = x0 + (x1 - x0) * u;
+      const y = t + 10 + fn(u) * (rowH - 14 - 20);
+      if (prev && i % 2 === 0) cv.line(prev[0], prev[1], x, y, { w: 3, color: C.grey, cap: 'round' });
+      if (i % 2 === 0) prev = [x, y];
+    }
+    cv.circle(x0, t + 10 + fn(0) * (rowH - 34), 9, { fill: C.plum });
+    cv.path(STAR_PATH, x1, t + 10 + fn(1) * (rowH - 34), 1.4, { fill: SHAPE_COLORS[0], stroke: rgb(0.85, 0.65, 0.2), sw: 0.8 });
+  });
+  cv.text(`Suis chaque ligne avec ton crayon, du rond violet jusqu’à l’étoile.`, PAGE.width / 2, AREA.top + 4 * rowH + 2, { font: 'label', size: 11, color: C.muted, align: 'center' });
+}
+
+function drawGoose(cv, ctx) {
+  const rnd = P.makeRng(`${ctx.seed}|oie`);
+  const cols = 6; const rows = 5; const n = cols * rows;
+  const specials = P.gooseSpecials(n, rnd);
+  const cw = Math.floor(AREA.w / cols); const ch = 76;
+  const ox = PAGE.width / 2 - (cw * cols) / 2;
+  const accent = pal(PALETTES[ctx.data.key]?.accent || PALETTES.forest.accent);
+  const posOf = (i) => { const r = Math.floor(i / cols); const c = r % 2 ? cols - 1 - (i % cols) : i % cols; return [c, r]; };
+  for (let i = 0; i < n; i++) {
+    const [c, r] = posOf(i);
+    const sp = specials.get(i + 1);
+    const fill = i === 0 ? C.blush : i === n - 1 ? accent : sp ? (sp[2] > 0 ? rgb(0.82, 0.94, 0.85) : sp[2] < 0 ? rgb(0.99, 0.84, 0.86) : rgb(0.99, 0.94, 0.78)) : C.white;
+    const x = ox + c * cw; const y = AREA.top + r * (ch + 4);
+    cv.rect(x + 2, y, cw - 4, ch, { fill, stroke: C.plum, sw: 1.4, r: 10 });
+    cv.text(String(i + 1), x + 10, y + 6, { font: 'title', size: 12, color: C.muted });
+    if (i === 0) cv.text('DÉPART', x + cw / 2, y + 34, { font: 'title', size: 11, color: C.plum, align: 'center' });
+    else if (i === n - 1) cv.text('ARRIVÉE', x + cw / 2, y + 34, { font: 'title', size: 11, color: C.plum, align: 'center' });
+    else if (sp) {
+      cv.text(sp[0] === 'R' ? '↻' : sp[0] === 'P' ? 'Zzz' : sp[0], x + cw / 2, y + 22, { font: 'title', size: 18, color: C.plum, align: 'center' });
+      cv.paragraph(sp[1], x + 6, y + 48, cw - 12, { font: 'label', size: 8.5, align: 'center', leading: 1.15 });
+    }
+    if (i < n - 1) {
+      const [c2, r2] = posOf(i + 1);
+      void c2; void r2;
+    }
+  }
+  const t = AREA.top + rows * (ch + 4) + 10;
+  cv.paragraph(`Règle : lance un dé, avance du nombre indiqué et suis la case. Le premier à atteindre ${ctx.data.goal} gagne. ${ctx.displayName} est le capitaine : à lui ou elle de lancer en premier !`, AREA.x, t, AREA.w, { font: 'italic', size: 11, align: 'center', color: C.ink });
+  cv.text('Il te faut : un dé et un petit pion par joueur (gomme, bouton, pièce).', PAGE.width / 2, t + 48, { font: 'label', size: 10.5, color: C.muted, align: 'center' });
+}
+
+function drawNumberSeq(cv, ctx, solution) {
+  const rnd = P.makeRng(`${ctx.seed}|seq`);
+  const seqs = P.numberSequences(ctx.age, 10, rnd);
+  const cw = 56;
+  seqs.forEach((s, i) => {
+    const t = AREA.top + i * 50;
+    cv.text(`${i + 1}`, AREA.x + 4, t + 14, { font: 'label', size: 12, color: C.muted });
+    s.terms.forEach((v, k) => {
+      const x = AREA.x + 30 + k * (cw + 6);
+      const hide = s.hidden.includes(k);
+      cv.rect(x, t, cw, 40, { fill: hide ? C.white : C.lavender, stroke: hide ? C.plum : undefined, sw: 1.6, r: 10 });
+      if (!hide) cv.text(String(v), x + cw / 2, t + 9, { font: 'title', size: 20, color: C.ink, align: 'center' });
+      else if (solution) cv.text(String(v), x + cw / 2, t + 9, { font: 'title', size: 20, color: C.plum, align: 'center' });
+    });
+  });
+}
+
+function drawVowels(cv, ctx, solution) {
+  const rnd = P.makeRng(`${ctx.seed}|vow`);
+  const words = P.shuffle(ctx.data.words.map(P.toGridWord).filter((w) => w.length >= 4 && w.length <= 9), rnd).slice(0, 8);
+  if (ctx.name.length >= 3 && ctx.name.length <= 9) words.push(ctx.name);
+  const cw = 30;
+  words.forEach((w, i) => {
+    const t = AREA.top + i * 52;
+    const isName = w === ctx.name;
+    cv.text(`${i + 1}`, AREA.x + 4, t + 12, { font: 'label', size: 12, color: C.muted });
+    [...w].forEach((ch, k) => {
+      const x = AREA.x + 30 + k * (cw + 4);
+      const vowel = 'AEIOUY'.includes(ch);
+      cv.rect(x, t, cw, 38, { fill: vowel ? C.white : isName ? C.blush : C.lavender, stroke: vowel ? C.plum : undefined, sw: 1.6, r: 8 });
+      if (!vowel) cv.text(ch, x + cw / 2, t + 8, { font: 'title', size: 20, color: C.ink, align: 'center' });
+      else if (solution) cv.text(ch, x + cw / 2, t + 8, { font: 'title', size: 20, color: C.plum, align: 'center' });
+    });
+    if (isName) cv.text('bonus : ton prénom', AREA.x + 30 + 9 * (cw + 4) + 6, t + 12, { font: 'label', size: 9.5, color: C.muted });
+  });
+}
+
+function drawBattle(cv, ctx) {
+  const cell = 21; const gs = cell * 10;
+  const letters = 'ABCDEFGHIJ';
+  const grid = (ox, top, title) => {
+    cv.text(title, ox + gs / 2 + 10, top - 32, { font: 'title', size: 13, color: C.plum, align: 'center' });
+    cv.rect(ox + 20, top, gs, gs, { fill: C.white });
+    for (let i = 0; i <= 10; i++) {
+      cv.line(ox + 20 + i * cell, top, ox + 20 + i * cell, top + gs, { w: 0.8, color: C.muted });
+      cv.line(ox + 20, top + i * cell, ox + 20 + gs, top + i * cell, { w: 0.8, color: C.muted });
+    }
+    for (let i = 0; i < 10; i++) {
+      cv.text(letters[i], ox + 20 + (i + 0.5) * cell, top - 14, { font: 'label', size: 9, color: C.plum, align: 'center' });
+      cv.text(String(i + 1), ox + 10, top + i * cell + 5, { font: 'label', size: 9, color: C.plum, align: 'center' });
+    }
+  };
+  grid(AREA.x, AREA.top + 34, 'Ma flotte');
+  grid(AREA.x, AREA.top + 34 + gs + 56, 'La flotte adverse (mes tirs)');
+  const px = AREA.x + 20 + gs + 26; const pw = AREA.w - (20 + gs + 26);
+  cv.rect(px, AREA.top + 4, pw, 300, { fill: C.white, stroke: C.lavender, sw: 1.6, r: 14 });
+  cv.text(`Amiral ${ctx.displayName}`, px + pw / 2, AREA.top + 16, { font: 'title', size: 15, color: C.plum, align: 'center' });
+  const fleet = [['Porte-avions', 5], ['Croiseur', 4], ['Sous-marin', 3], ['Torpilleur', 3], ['Patrouilleur', 2]];
+  fleet.forEach(([nm, len], i) => {
+    const y = AREA.top + 50 + i * 36;
+    cv.text(nm, px + 12, y, { font: 'label', size: 11 });
+    for (let k = 0; k < len; k++) cv.rect(px + 12 + k * 16, y + 15, 14, 12, { fill: C.lavender, stroke: C.plum, sw: 0.8, r: 3 });
+  });
+  cv.paragraph('Place secrètement ta flotte, puis annonce une case (ex. : C4). « Touché » ou « À l’eau » ? Coule tous les bateaux adverses !', px + 12, AREA.top + 240, pw - 24, { font: 'body', size: 9.5, leading: 1.3, color: C.ink });
+  cv.paragraph('Marque ● pour touché, ○ pour à l’eau.', px + 12, AREA.top + 314, pw - 24, { font: 'label', size: 9.5, color: C.muted });
+}
+
+function drawLogic(cv, ctx, solution) {
+  const rnd = P.makeRng(`${ctx.seed}|logic`);
+  const sqCell = 48;
+  [0, 1].forEach((k) => {
+    const m = P.magicSquare(rnd);
+    const ox = AREA.x + 20 + k * 250; const top = AREA.top + 22;
+    cv.text(`Carré magique ${k + 1}`, ox + sqCell * 1.5, top - 20, { font: 'title', size: 13, color: C.plum, align: 'center' });
+    m.grid.forEach((row, r) => row.forEach((v, c) => {
+      const blank = m.blanks.some(([br, bc]) => br === r && bc === c);
+      cv.rect(ox + c * sqCell, top + r * sqCell, sqCell, sqCell, { fill: blank ? C.white : C.lavender, stroke: C.plum, sw: 1.4 });
+      if (!blank) cv.text(String(v), ox + (c + 0.5) * sqCell, top + r * sqCell + 12, { font: 'title', size: 20, align: 'center' });
+      else if (solution) cv.text(String(v), ox + (c + 0.5) * sqCell, top + r * sqCell + 12, { font: 'title', size: 20, color: C.plum, align: 'center' });
+    }));
+    cv.text(`Chaque ligne, colonne et diagonale fait ${m.sum}`, ox + sqCell * 1.5, top + sqCell * 3 + 8, { font: 'label', size: 9.5, color: C.muted, align: 'center' });
+  });
+  const pTop = AREA.top + 215;
+  cv.text('Pyramides : chaque case est la somme des deux cases en dessous', PAGE.width / 2, pTop - 6, { font: 'title', size: 12, color: C.plum, align: 'center' });
+  [0, 1, 2].forEach((k) => {
+    const p = P.pyramid(rnd, 6 + ctx.age);
+    const pc = 38; const ph = 34;
+    const ox = AREA.x + k * 165 + 6;
+    p.rows.forEach((row, r) => row.forEach((v, c) => {
+      const x = ox + ((4 - row.length) * pc) / 2 + c * pc; const y = pTop + 26 + r * (ph + 4);
+      const blank = p.hidden.some(([hr, hc]) => hr === r && hc === c);
+      cv.rect(x, y, pc - 2, ph, { fill: blank ? C.white : C.lavender, stroke: C.plum, sw: 1.3, r: 6 });
+      if (!blank) cv.text(String(v), x + (pc - 2) / 2, y + 8, { font: 'title', size: 15, align: 'center' });
+      else if (solution) cv.text(String(v), x + (pc - 2) / 2, y + 8, { font: 'title', size: 15, color: C.plum, align: 'center' });
+    }));
+  });
+  cv.text('Astuce : cherche d’abord la case qui n’a qu’une inconnue !', PAGE.width / 2, pTop + 26 + 4 * (34 + 4) + 12, { font: 'label', size: 11, color: C.muted, align: 'center' });
+}
+
+function drawColumn(cv, ctx, solution) {
+  const rnd = P.makeRng(`${ctx.seed}|col`);
+  const pool = [...ctx.data.words, ...ALL_WORDS];
+  let key = ctx.name.length >= 3 && ctx.name.length <= 9 ? ctx.name : '';
+  let rows = key ? P.columnWords(key, pool, rnd) : null;
+  if (!rows) {
+    key = P.toGridWord(ctx.data.words.find((w) => P.toGridWord(w).length >= 5 && P.toGridWord(w).length <= 8) || 'AVENTURE');
+    rows = P.columnWords(key, pool, rnd);
+  }
+  const maxPos = Math.max(...rows.map((r) => r.pos));
+  const width = maxPos + Math.max(...rows.map((r) => r.word.length - r.pos));
+  const cw = Math.min(30, Math.floor((AREA.w - 10) / width));
+  const rowH = Math.min(36, Math.floor(300 / rows.length));
+  const ox = PAGE.width / 2 - (width * cw) / 2;
+  rows.forEach((r, i) => {
+    const t = AREA.top + i * rowH;
+    [...r.word].forEach((ch, k) => {
+      const col = maxPos - r.pos + k;
+      const hl = k === r.pos;
+      cv.rect(ox + col * cw, t, cw - 2, rowH - 4, { fill: hl ? C.blush : C.white, stroke: hl ? C.plum : C.muted, sw: hl ? 1.8 : 1, r: 4 });
+      if (solution) cv.text(ch, ox + col * cw + (cw - 2) / 2, t + (rowH - 4) / 2 - 7, { font: 'title', size: 15, color: C.plum, align: 'center' });
+    });
+  });
+  const listTop = AREA.top + rows.length * rowH + 24;
+  cv.text('Mots à placer', PAGE.width / 2, listTop - 4, { font: 'title', size: 13, color: C.plum, align: 'center' });
+  const list = P.shuffle(rows.map((r) => r.word), rnd);
+  const colW = AREA.w / 4;
+  list.forEach((w, i) => cv.text(w, AREA.x + (i % 4) * colW + colW / 2, listTop + 20 + Math.floor(i / 4) * 20, { font: 'label', size: 12, align: 'center' }));
+  const ansTop = listTop + 20 + Math.ceil(list.length / 4) * 20 + 14;
+  cv.text(`Les cases roses, lues de haut en bas, forment un mot : ${key.length} lettres.`, PAGE.width / 2, ansTop, { font: 'label', size: 11, color: C.muted, align: 'center' });
+  [...key].forEach((ch, i) => {
+    const x = PAGE.width / 2 - (key.length * 28) / 2 + i * 28;
+    cv.rect(x, ansTop + 24, 26, 32, { fill: C.white, stroke: C.plum, sw: 1.4, r: 6 });
+    if (solution) cv.text(ch, x + 13, ansTop + 30, { font: 'title', size: 17, color: C.plum, align: 'center' });
+  });
+}
+
 // ---------- Définition des jeux : titre, mission personnalisée, rendu ----------
 const RENDERERS = {
+  suite: { solution: true, mission: (c) => `${c.displayName} est un as de la logique : quels sont les deux derniers dessins de chaque rangée ?`, draw: drawPattern },
+  pixel: { solution: true, mission: (c) => `Colorie chaque case selon son numéro, et découvre le dessin surprise de ${c.displayName} !`, draw: drawPixel },
+  trace: { solution: false, mission: (c) => `${c.displayName} suit les chemins avec son crayon, sans sortir de la ligne : un vrai champion de l’écriture !`, draw: drawTrace },
+  oie: { solution: false, mission: (c) => `${c.displayName} lance l’aventure ! Qui atteindra ${c.data.goal} en premier ?`, draw: drawGoose },
+  suitenombres: { solution: true, mission: (c) => `Les nombres de ${c.displayName} jouent à cache-cache : retrouve les deux nombres cachés de chaque suite.`, draw: drawNumberSeq },
+  voyelles: { solution: true, mission: (c) => `Oups, les voyelles se sont envolées ! ${c.displayName} doit les remettre dans les mots de l’univers « ${c.data.label} ».`, draw: drawVowels },
+  bataille: { solution: false, mission: (c) => `Amiral ${c.displayName}, à vous de couler la flotte adverse ! Imprimez deux exemplaires pour jouer à deux.`, draw: drawBattle },
+  logique: { solution: true, mission: (c) => `${c.displayName} met ses talents de calcul à l’épreuve : complète les carrés magiques et les pyramides.`, draw: drawLogic },
+  colonne: { solution: true, mission: (c) => `Place chaque mot de l’univers « ${c.data.label} » pour faire apparaître un mot mystère, celui de ${c.displayName} !`, draw: drawColumn },
   coloriage: { solution: false, mission: (c) => `${c.displayName}, prends tes crayons préférés : ce dessin attend tes plus belles couleurs !`, draw: drawColoring },
   points: { solution: true, mission: (c) => `Relie les points dans l’ordre pour aider ${c.displayName} à découvrir la surprise cachée.`, draw: drawDots },
   labyrinthe: { solution: true, mission: (c) => `Aide ${c.displayName} à traverser le labyrinthe pour rejoindre ${c.data.goal}.`, draw: drawMaze },

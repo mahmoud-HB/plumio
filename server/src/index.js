@@ -27,7 +27,7 @@ const USE_AI = Boolean(process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY.
 // Le client OpenAI lève une erreur à la construction sans clé ; le générateur local n'en a pas besoin.
 const openai = USE_AI ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY, timeout: 90_000, maxRetries: 1 }) : null;
 
-const THEMES = ['Espace', 'Forêt magique', 'Pirates', 'Super-héros', 'Licornes', 'Dinosaures', 'Océan', 'Chevaliers & dragons', 'Savane', 'Robots & inventions', 'Cirque', 'Mystère & détectives'];
+const THEMES = ['Espace', 'Forêt magique', 'Pirates', 'Super-héros', 'Licornes', 'Dinosaures', 'Océan', 'Chevaliers & dragons', 'Savane', 'Robots & inventions', 'Cirque', 'Mystère & détectives', 'Fées & lutins', 'Banquise', 'Sports & champions', 'Pâtisserie & cuisine'];
 const MODEL_TEXT = process.env.MODEL_TEXT || 'gpt-4o-mini';
 const MAX_BASE64_BYTES = 4_200_000; // la réponse JSON doit rester sous 4,5 Mo sur Vercel
 

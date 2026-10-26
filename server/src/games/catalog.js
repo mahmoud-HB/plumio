@@ -21,17 +21,28 @@ export const GAMES = [
   { id: 'compte', band: 'petits', icon: '⭐', title: 'Compte les formes', blurb: 'Étoiles, cœurs et ballons à compter, puis à noter dans les cases.', skill: 'Dénombrement', minutes: 10 },
   { id: 'prenom', band: 'petits', icon: '✏️', title: 'J’écris mon prénom', blurb: 'Le prénom à repasser, à recopier sur des lignes guides, et un cadre pour se dessiner.', skill: 'Écriture, reconnaissance des lettres', minutes: 15 },
 
+  { id: 'suite', band: 'petits', icon: '🔷', title: 'Continue la suite', blurb: 'Étoiles, cœurs et ronds à continuer pour compléter chaque rangée.', skill: 'Logique, observation', minutes: 10 },
+  { id: 'pixel', band: 'petits', icon: '🎨', title: 'Colorie par numéros', blurb: 'Chaque numéro a sa couleur : un dessin surprise apparaît, case après case.', skill: 'Chiffres, couleurs', minutes: 20 },
+  { id: 'trace', band: 'petits', icon: '〰️', title: 'Trace les chemins', blurb: 'Suivre des lignes en pointillés (vagues, zigzags, spirales) pour s’entraîner à écrire.', skill: 'Pré-écriture', minutes: 10 },
+
   { id: 'motsmeles', band: 'moyens', icon: '🔤', title: 'Mots mêlés', blurb: 'Grille 10×10 avec le prénom de l’enfant et des mots du thème choisi.', skill: 'Lecture, attention', minutes: 15 },
   { id: 'sudoku', band: 'moyens', icon: '🔲', title: 'Sudoku 6×6', blurb: 'Une grille générée à solution unique, pour débuter la logique.', skill: 'Logique', minutes: 15 },
   { id: 'labyrinthe', band: 'moyens', icon: '🧭', title: 'Labyrinthe', blurb: 'Un labyrinthe moyen avec départ et arrivée à thème.', skill: 'Anticipation', minutes: 10 },
   { id: 'code', band: 'moyens', icon: '🔐', title: 'Message secret', blurb: 'Chaque nombre cache une lettre : déchiffrer un message adressé à l’enfant.', skill: 'Lecture, alphabet', minutes: 15 },
   { id: 'calculs', band: 'moyens', icon: '➕', title: 'Défi des calculs', blurb: '12 calculs adaptés à l’âge (additions, soustractions, tables) et un score.', skill: 'Calcul mental', minutes: 15 },
 
+  { id: 'oie', band: 'moyens', icon: '🎲', title: 'Jeu de l’oie', blurb: 'Un plateau à imprimer pour jouer en famille, avec le prénom de l’enfant dans l’aventure.', skill: 'Jeu de société, comptage', minutes: 30 },
+  { id: 'suitenombres', band: 'moyens', icon: '🔟', title: 'Suites de nombres', blurb: 'Retrouver les deux nombres cachés dans 10 suites logiques.', skill: 'Logique numérique', minutes: 15 },
+  { id: 'voyelles', band: 'moyens', icon: '🅰️', title: 'Voyelles perdues', blurb: 'Les voyelles ont disparu : remettre les mots du thème (et le prénom) en état.', skill: 'Orthographe', minutes: 15 },
+
   { id: 'motsmeles', band: 'grands', icon: '🔤', title: 'Mots mêlés XXL', blurb: 'Grille 14×14 dans les 8 directions, avec le prénom caché parmi les mots.', skill: 'Observation', minutes: 20 },
   { id: 'sudoku', band: 'grands', icon: '🔲', title: 'Sudoku 9×9', blurb: 'Une vraie grille 9×9 à solution unique, différente à chaque téléchargement.', skill: 'Logique, déduction', minutes: 25 },
   { id: 'labyrinthe', band: 'grands', icon: '🧭', title: 'Labyrinthe géant', blurb: 'Un labyrinthe dense 18×22 à résoudre au crayon.', skill: 'Planification', minutes: 15 },
   { id: 'cesar', band: 'grands', icon: '🕵️', title: 'Code de César', blurb: 'Un message codé par décalage de lettres : trouver la clé et le déchiffrer.', skill: 'Cryptographie, logique', minutes: 20 },
-  { id: 'anagrammes', band: 'grands', icon: '🔀', title: 'Anagrammes', blurb: 'Remettre en ordre 9 mots du thème, plus le prénom en bonus.', skill: 'Orthographe, vocabulaire', minutes: 20 }
+  { id: 'anagrammes', band: 'grands', icon: '🔀', title: 'Anagrammes', blurb: 'Remettre en ordre 9 mots du thème, plus le prénom en bonus.', skill: 'Orthographe, vocabulaire', minutes: 20 },
+  { id: 'bataille', band: 'grands', icon: '🚢', title: 'Bataille navale', blurb: 'Deux grilles et une flotte à imprimer pour défier un adversaire, avec l’Amiral au prénom de l’enfant.', skill: 'Stratégie, repérage', minutes: 30 },
+  { id: 'logique', band: 'grands', icon: '🧮', title: 'Carrés magiques & pyramides', blurb: 'Deux carrés magiques et trois pyramides de nombres à compléter.', skill: 'Calcul, déduction', minutes: 25 },
+  { id: 'colonne', band: 'grands', icon: '🧱', title: 'Le mot en colonne', blurb: 'Placer les mots du thème pour faire apparaître le prénom dans la colonne centrale.', skill: 'Vocabulaire, logique', minutes: 20 }
 ];
 
 export const gamesFor = (band) => GAMES.filter((g) => g.band === band);
@@ -51,8 +62,14 @@ const DATA = {
   safari: { label: 'Savane', words: ['GIRAFE', 'LION', 'ZEBRE', 'SAVANE', 'ELEPHANT', 'SINGE', 'BAOBAB', 'GUEPARD', 'SOLEIL', 'HERBE'], goal: 'le baobab', secret: 'TU AS LE COEUR D UN LION', spot: 'SOUS LE BAOBAB' },
   robots: { label: 'Robots & inventions', words: ['ROBOT', 'ENGRENAGE', 'ATELIER', 'CIRCUIT', 'PILE', 'INVENTEUR', 'MOTEUR', 'ECRAN', 'VIS', 'BOULON'], goal: 'l’atelier', secret: 'TU ES UN GRAND INVENTEUR', spot: 'DANS L ATELIER' },
   circus: { label: 'Cirque', words: ['CHAPITEAU', 'CLOWN', 'TRAPEZE', 'MAGICIEN', 'JONGLEUR', 'PISTE', 'ACROBATE', 'BALLON', 'NEZ', 'SPECTACLE'], goal: 'la piste du cirque', secret: 'TU ES LA STAR DU SPECTACLE', spot: 'SOUS LE CHAPITEAU' },
+  fairies: { label: 'Fées & lutins', words: ['FEE', 'LUTIN', 'BAGUETTE', 'ETOILE', 'AILES', 'MAGIE', 'LUCIOLE', 'POUDRE', 'ELFE', 'CHAMPIGNON'], goal: 'la clairière enchantée', secret: 'LA MAGIE EST EN TOI', spot: 'SOUS LE GRAND CHAMPIGNON' },
+  polar: { label: 'Banquise', words: ['PINGOUIN', 'IGLOO', 'GLACE', 'PHOQUE', 'NEIGE', 'AURORE', 'TRAINEAU', 'BANQUISE', 'MORSE', 'OURS'], goal: 'l’igloo', secret: 'TU AS LE COEUR CHAUD', spot: 'PRES DE L IGLOO' },
+  sports: { label: 'Sports & champions', words: ['FOOTBALL', 'BALLON', 'COURSE', 'EQUIPE', 'MEDAILLE', 'STADE', 'COUPE', 'ARBITRE', 'VELO', 'TENNIS'], goal: 'la ligne d’arrivée', secret: 'TU ES UN CHAMPION', spot: 'AU BORD DU STADE' },
+  bakery: { label: 'Pâtisserie & cuisine', words: ['GATEAU', 'FARINE', 'BRIOCHE', 'CREME', 'FOUR', 'SUCRE', 'BISCUIT', 'CHOCOLAT', 'TARTE', 'MACARON'], goal: 'la pâtisserie', secret: 'TU ES UN GRAND CHEF', spot: 'DANS LA CUISINE' },
   mystery: { label: 'Mystère & détectives', words: ['INDICE', 'ENQUETE', 'LOUPE', 'MYSTERE', 'SECRET', 'DETECTIVE', 'ENIGME', 'TEMOIN', 'TRACE', 'CLE'], goal: 'la clé du mystère', secret: 'ENQUETE RESOLUE BRAVO', spot: 'DERRIERE LA PORTE BLEUE' }
 };
+
+export const ALL_WORDS = Object.values(DATA).flatMap((d) => d.words);
 
 export function themeData(theme) {
   if (!theme) return { key: 'generic', ...DATA.generic };

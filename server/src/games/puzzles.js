@@ -246,3 +246,74 @@ export function scatter(counts, width, height, rnd, size) {
   });
   return items;
 }
+
+// ---------- Suites de nombres : 6 termes dont 2 masqués ----------
+export function numberSequences(age, count, rnd) {
+  const a = Number(age);
+  const out = [];
+  const seen = new Set();
+  while (out.length < count) {
+    let terms;
+    const kind = a >= 8 && rnd() < 0.3 ? 'double' : rnd() < 0.3 ? 'down' : 'up';
+    if (kind === 'double') {
+      const s = 1 + Math.floor(rnd() * 3);
+      terms = Array.from({ length: 6 }, (_, i) => s * 2 ** i);
+    } else {
+      const step = (a <= 6 ? [1, 2, 5, 10] : a === 7 ? [2, 3, 4, 5, 10] : [3, 4, 6, 7, 9, 11, 25])[Math.floor(rnd() * (a <= 6 ? 4 : a === 7 ? 5 : 7))];
+      const start = kind === 'down' ? step * 6 + Math.floor(rnd() * 10) : 1 + Math.floor(rnd() * 20);
+      terms = Array.from({ length: 6 }, (_, i) => (kind === 'down' ? start - step * i : start + step * i));
+    }
+    const key = terms.join();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const hidden = shuffle([1, 2, 3, 4, 5], rnd).slice(0, 2).sort();
+    out.push({ terms, hidden });
+  }
+  return out;
+}
+
+// ---------- Carré magique 3x3 (3 cases masquées, une par ligne et par colonne) ----------
+export function magicSquare(rnd) {
+  let g = [[2, 7, 6], [9, 5, 1], [4, 3, 8]];
+  const turns = Math.floor(rnd() * 4);
+  for (let t = 0; t < turns; t++) g = g[0].map((_, c) => g.map((row) => row[c]).reverse());
+  if (rnd() < 0.5) g = g.map((row) => [...row].reverse());
+  const k = Math.floor(rnd() * 12);
+  g = g.map((row) => row.map((v) => v + k));
+  const perm = shuffle([0, 1, 2], rnd);
+  return { grid: g, sum: 15 + 3 * k, blanks: perm.map((c, r) => [r, c]) };
+}
+
+// ---------- Pyramide additive à 4 étages ; masque top, L1[1], L2[1], L3[1] (déductibles) ----------
+export function pyramid(rnd, max = 9) {
+  const base = Array.from({ length: 4 }, () => 1 + Math.floor(rnd() * max));
+  const l2 = [base[0] + base[1], base[1] + base[2], base[2] + base[3]];
+  const l1 = [l2[0] + l2[1], l2[1] + l2[2]];
+  const rows = [[l1[0] + l1[1]], l1, l2, base];
+  return { rows, hidden: [[0, 0], [1, 1], [2, 1], [3, 1]] };
+}
+
+// ---------- Mot en colonne : un mot du thème par lettre de la clé, aligné sur cette lettre ----------
+export function columnWords(key, pool, rnd) {
+  const words = [...new Set(pool.map(toGridWord))].filter((w) => w.length >= 3 && w.length <= 9);
+  const used = new Set();
+  const rows = [];
+  for (const letter of key) {
+    const cand = shuffle(words.filter((w) => w.includes(letter) && !used.has(w)), rnd);
+    if (!cand.length) return null;
+    cand.sort((a, b) => Math.abs(a.indexOf(letter) - 3) - Math.abs(b.indexOf(letter) - 3));
+    const word = cand[0];
+    used.add(word);
+    rows.push({ word, pos: word.indexOf(letter) });
+  }
+  return rows;
+}
+
+// ---------- Jeu de l'oie : cases spéciales (index 1..n-2) ----------
+export function gooseSpecials(n, rnd) {
+  const kinds = [['+2', 'Avance de 2 cases', 2], ['+3', 'Avance de 3 cases', 3], ['-2', 'Recule de 2 cases', -2], ['-3', 'Recule de 3 cases', -3], ['R', 'Rejoue !', 0], ['R', 'Rejoue !', 0], ['P', 'Passe un tour', 0]];
+  const cells = shuffle(Array.from({ length: n - 4 }, (_, i) => i + 2), rnd).slice(0, 8);
+  const map = new Map();
+  cells.forEach((cell, i) => map.set(cell, kinds[i % kinds.length]));
+  return map;
+}

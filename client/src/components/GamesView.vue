@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { THEMES } from '../lib/themes.js';
-import { fetchGamesPdf } from '../lib/api.js';
+import { fetchGamesCatalog, fetchGamesPdf } from '../lib/api.js';
 
 const AGE_MIN = 3;
 const AGE_MAX = 12;
@@ -12,25 +12,9 @@ const BANDS = [
   { id: 'grands', label: '9-12 ans', emoji: '🧩' }
 ];
 
-const GAMES = [
-  { id: 'coloriage', band: 'petits', icon: '🖍️', title: 'Grand coloriage', blurb: 'Un grand dessin à colorier, avec le prénom de l’enfant en bannière.', skill: 'Motricité fine' },
-  { id: 'points', band: 'petits', icon: '🔢', title: 'Relie les points', blurb: 'Des nombres à relier dans l’ordre pour faire apparaître une surprise (étoile, cœur ou maison).', skill: 'Chiffres' },
-  { id: 'labyrinthe', band: 'petits', icon: '🧭', title: 'Mon premier labyrinthe', blurb: 'Un labyrinthe large et facile pour atteindre son but.', skill: 'Concentration' },
-  { id: 'compte', band: 'petits', icon: '⭐', title: 'Compte les formes', blurb: 'Étoiles, cœurs et ballons à compter, puis à noter.', skill: 'Dénombrement' },
-  { id: 'prenom', band: 'petits', icon: '✏️', title: 'J’écris mon prénom', blurb: 'Le prénom à repasser, à recopier sur des lignes guides.', skill: 'Écriture' },
-
-  { id: 'motsmeles', band: 'moyens', icon: '🔤', title: 'Mots mêlés', blurb: 'Grille 10×10 avec le prénom de l’enfant et des mots du thème.', skill: 'Lecture' },
-  { id: 'sudoku', band: 'moyens', icon: '🔲', title: 'Sudoku 6×6', blurb: 'Une grille à solution unique pour débuter la logique.', skill: 'Logique' },
-  { id: 'labyrinthe', band: 'moyens', icon: '🧭', title: 'Labyrinthe', blurb: 'Un labyrinthe moyen avec départ et arrivée à thème.', skill: 'Anticipation' },
-  { id: 'code', band: 'moyens', icon: '🔐', title: 'Message secret', blurb: 'Chaque nombre cache une lettre : décoder un message pour l’enfant.', skill: 'Alphabet' },
-  { id: 'calculs', band: 'moyens', icon: '➕', title: 'Défi des calculs', blurb: '12 calculs adaptés à l’âge et un score à remplir.', skill: 'Calcul mental' },
-
-  { id: 'motsmeles', band: 'grands', icon: '🔤', title: 'Mots mêlés XXL', blurb: 'Grille 14×14 dans 8 directions, avec le prénom caché.', skill: 'Observation' },
-  { id: 'sudoku', band: 'grands', icon: '🔲', title: 'Sudoku 9×9', blurb: 'Une vraie grille 9×9 à solution unique.', skill: 'Déduction' },
-  { id: 'labyrinthe', band: 'grands', icon: '🧭', title: 'Labyrinthe géant', blurb: 'Un labyrinthe dense à résoudre au crayon.', skill: 'Planification' },
-  { id: 'cesar', band: 'grands', icon: '🕵️', title: 'Code de César', blurb: 'Un message codé par décalage de lettres à déchiffrer.', skill: 'Cryptographie' },
-  { id: 'anagrammes', band: 'grands', icon: '🔀', title: 'Anagrammes', blurb: 'Remettre en ordre les mots du thème, plus le prénom en bonus.', skill: 'Vocabulaire' }
-];
+const games_all = ref([]);
+const loadError = ref('');
+fetchGamesCatalog().then((c) => { games_all.value = c.games; }).catch((e) => { loadError.value = e.message; });
 
 const name = ref('');
 const age = ref(7);
@@ -44,7 +28,7 @@ const touched = ref(false);
 
 const band = computed(() => (age.value <= 5 ? 'petits' : age.value >= 9 ? 'grands' : 'moyens'));
 const bandInfo = computed(() => BANDS.find((b) => b.id === band.value));
-const games = computed(() => GAMES.filter((g) => g.band === band.value));
+const games = computed(() => games_all.value.filter((g) => g.band === band.value));
 const trimmed = computed(() => name.value.trim());
 const nameError = computed(() => (touched.value && !trimmed.value ? 'Indique le prénom de l’enfant.' : ''));
 
@@ -77,7 +61,7 @@ async function download(gameId) {
     const blob = await fetchGamesPdf({ name: trimmed.value, age: age.value, theme: theme.value, gameId, variant: variant.value, solution: solution.value });
     const slug = trimmed.value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-|-$/g, '').toLowerCase() || 'enfant';
     save(blob, `plumio-jeux-${slug}-${gameId === 'all' ? band.value : gameId}.pdf`);
-    done.value = gameId === 'all' ? `Les 5 jeux de ${trimmed.value} sont téléchargés.` : 'Le jeu est téléchargé. Il ne reste plus qu’à imprimer !';
+    done.value = gameId === 'all' ? `Les ${games.value.length} jeux de ${trimmed.value} sont téléchargés.` : 'Le jeu est téléchargé. Il ne reste plus qu’à imprimer !';
   } catch (e) {
     error.value = e.message || 'Une erreur est survenue.';
   } finally {
@@ -91,7 +75,7 @@ async function download(gameId) {
     <section class="games-hero">
       <span class="eyebrow">Jeux à imprimer</span>
       <h1>Des jeux au prénom de votre enfant</h1>
-      <p class="lead">Cinq jeux par tranche d’âge, personnalisés avec son prénom et l’univers qu’il aime. Téléchargez en PDF, imprimez en A4, et c’est parti !</p>
+      <p class="lead">Huit jeux par tranche d’âge, personnalisés avec son prénom et l’univers qu’il aime. Téléchargez en PDF, imprimez en A4, et c’est parti !</p>
     </section>
 
     <form class="games-form card" @submit.prevent="download('all')" novalidate>
@@ -139,12 +123,13 @@ async function download(gameId) {
     </div>
 
     <div class="games-head">
-      <h2>{{ bandInfo.emoji }} Les 5 jeux des {{ bandInfo.label }}</h2>
+      <h2>{{ bandInfo.emoji }} Les {{ games.length || 8 }} jeux des {{ bandInfo.label }}</h2>
       <button class="btn btn-primary" :disabled="Boolean(busy)" @click="download('all')">
         {{ busy === 'all' ? 'Préparation…' : 'Tout télécharger (PDF)' }}
       </button>
     </div>
 
+    <p v-if="loadError" class="notice notice-error" role="alert">{{ loadError }}</p>
     <div class="games-grid">
       <article v-for="g in games" :key="g.id" class="game-card">
         <span class="game-icon" aria-hidden="true">{{ g.icon }}</span>

@@ -7,14 +7,17 @@ import { PETITS_C } from './bands/petits-c.js';
 import { GRANDS_A } from './bands/grands-a.js';
 import { GRANDS_B } from './bands/grands-b.js';
 import { GRANDS_C } from './bands/grands-c.js';
+import { PETITS_D } from './bands/petits-d.js';
+import { MOYENS_D } from './bands/moyens-d.js';
+import { GRANDS_D } from './bands/grands-d.js';
 import { themeKey } from '../pdf/scenes.js';
 import { PAGE_COUNT } from './validate.js';
 
 // Une histoire par thème et par tranche d'âge : petits (3-5), moyens (6-8), grands (9+).
 const BANDS = {
-  petits: { ...PETITS_A, ...PETITS_B, ...PETITS_C },
-  moyens: { ...BASE, ...MORE_STORIES, ...MOYENS_NEW },
-  grands: { ...GRANDS_A, ...GRANDS_B, ...GRANDS_C }
+  petits: { ...PETITS_A, ...PETITS_B, ...PETITS_C, ...PETITS_D },
+  moyens: { ...BASE, ...MORE_STORIES, ...MOYENS_NEW, ...MOYENS_D },
+  grands: { ...GRANDS_A, ...GRANDS_B, ...GRANDS_C, ...GRANDS_D }
 };
 
 export function ageBand(age) {

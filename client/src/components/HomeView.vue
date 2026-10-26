@@ -61,7 +61,7 @@ const perks = [
     </section>
 
     <section class="section">
-      <h2 class="section-title">Douze univers à explorer</h2>
+      <h2 class="section-title">Seize univers à explorer</h2>
       <div class="theme-strip">
         <button v-for="t in THEMES" :key="t.id" class="theme-chip" :class="`tone-${t.tone}`" @click="$emit('start', t.id)">
           <span class="theme-emoji">{{ t.emoji }}</span>
@@ -75,7 +75,7 @@ const perks = [
       <div>
         <span class="eyebrow">Nouveau</span>
         <h2 class="section-title">Des jeux à imprimer au prénom de votre enfant</h2>
-        <p class="lead">Coloriages, labyrinthes, mots mêlés, sudoku, messages secrets… 5 jeux par tranche d’âge, personnalisés et prêts à télécharger en PDF.</p>
+        <p class="lead">Coloriages, labyrinthes, mots mêlés, sudoku, messages secrets… 8 jeux par tranche d’âge, personnalisés et prêts à télécharger en PDF.</p>
         <button class="btn btn-ghost btn-lg" @click="$emit('games')">Découvrir les jeux <span aria-hidden="true">→</span></button>
       </div>
       <div class="games-teaser-icons" aria-hidden="true"><span>🖍️</span><span>🧭</span><span>🔤</span><span>🔐</span><span>🔲</span><span>🕵️</span></div>

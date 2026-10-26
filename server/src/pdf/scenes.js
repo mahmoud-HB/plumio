@@ -16,6 +16,10 @@ export function themeKey(theme = '') {
   if (t.includes('robot')) return 'robots';
   if (t.includes('cirque')) return 'circus';
   if (t.includes('mystere') || t.includes('detective')) return 'mystery';
+  if (t.includes('fee') || t.includes('lutin')) return 'fairies';
+  if (t.includes('banquise') || t.includes('polaire')) return 'polar';
+  if (t.includes('sport') || t.includes('champion')) return 'sports';
+  if (t.includes('patisserie') || t.includes('cuisine')) return 'bakery';
   if (t.includes('savane') || t.includes('safari')) return 'safari';
   return 'forest';
 }
@@ -32,6 +36,10 @@ export const PALETTES = {
   robots: { top: [0.82, 0.9, 0.98], bottom: [0.75, 0.82, 0.95], accent: [0.99, 0.82, 0.45] },
   circus: { top: [0.99, 0.8, 0.82], bottom: [0.99, 0.92, 0.75], accent: [0.99, 0.85, 0.4] },
   mystery: { top: [0.22, 0.24, 0.45], bottom: [0.5, 0.45, 0.7], accent: [0.99, 0.88, 0.5] },
+  fairies: { top: [0.85, 0.8, 0.97], bottom: [0.75, 0.9, 0.85], accent: [1, 0.9, 0.6] },
+  polar: { top: [0.18, 0.28, 0.5], bottom: [0.75, 0.88, 0.97], accent: [0.7, 0.98, 0.85] },
+  sports: { top: [0.7, 0.86, 0.98], bottom: [0.85, 0.95, 0.8], accent: [0.99, 0.85, 0.4] },
+  bakery: { top: [1, 0.9, 0.85], bottom: [0.99, 0.95, 0.8], accent: [1, 0.75, 0.6] },
   safari: { top: [0.99, 0.8, 0.55], bottom: [0.95, 0.88, 0.6], accent: [1, 0.93, 0.7] }
 };
 
@@ -322,6 +330,66 @@ export function drawScene(page, box, theme, seed = 0) {
     const lx = 0.3 + rnd() * 0.4;
     page.drawCircle({ x: X(lx), y: Y(0.14), size: 0.07 * S, borderColor: col([0.99, 0.9, 0.6]), borderWidth: S * 0.012, color: col([0.7, 0.85, 0.95]), opacity: 0.35 });
     poly([[lx + 0.045, 0.1], [lx + 0.1, 0.03], [lx + 0.115, 0.045], [lx + 0.06, 0.115]], [0.99, 0.9, 0.6]);
+  } else if (key === 'fairies') {
+    for (let i = 0; i < 26; i++) star(rnd(), 0.4 + rnd() * 0.55, 0.006 + rnd() * 0.01, pal.accent, 0.5 + rnd() * 0.5);
+    hill(0.1, 0.14, [0.62, 0.8, 0.7], rnd() * 3);
+    const mx = 0.2 + rnd() * 0.5;
+    poly([[mx - 0.012, 0.1], [mx - 0.012, 0.3], [mx + 0.012, 0.3], [mx + 0.012, 0.1]], [0.95, 0.9, 0.85]);
+    ellipse(mx, 0.3, 0.12, 0.07, [0.95, 0.5, 0.65]);
+    for (const [u, v] of [[-0.05, 0.31], [0.04, 0.34], [0.07, 0.28]]) circle(mx + u, v, 0.014, [1, 1, 1], 0.9);
+    const fx = 0.65 + rnd() * 0.2;
+    ellipse(fx - 0.04, 0.62, 0.05, 0.025, [0.85, 0.9, 1], 0.8);
+    ellipse(fx + 0.04, 0.62, 0.05, 0.025, [0.85, 0.9, 1], 0.8);
+    poly([[fx - 0.014, 0.5], [fx + 0.014, 0.5], [fx + 0.022, 0.66], [fx - 0.022, 0.66]], [0.99, 0.75, 0.85]);
+    circle(fx, 0.69, 0.016, [1, 0.9, 0.82]);
+    circle(fx, 0.54, 0.07, pal.accent, 0.3);
+    hill(0.0, 0.08, [0.45, 0.68, 0.58], rnd() * 3 + 1);
+  } else if (key === 'polar') {
+    for (let i = 0; i < 14; i++) star(rnd(), 0.6 + rnd() * 0.4, 0.005 + rnd() * 0.007, white, 0.7);
+    for (let k = 0; k < 3; k++) poly([[0.05 + k * 0.28, 0.9], [0.2 + k * 0.28, 0.9], [0.3 + k * 0.28, 0.55], [0.12 + k * 0.28, 0.55]], [[0.55, 0.9, 0.8], [0.7, 0.8, 0.95], [0.6, 0.95, 0.85]][k], 0.28);
+    poly([[0, 0.3], [0.25, 0.4], [0.5, 0.3], [0.75, 0.42], [1, 0.32], [1, 0], [0, 0]], [0.97, 0.99, 1]);
+    const px = 0.25 + rnd() * 0.5;
+    ellipse(px, 0.2, 0.07, 0.09, [0.2, 0.22, 0.32]);
+    ellipse(px, 0.19, 0.045, 0.065, [1, 1, 1]);
+    circle(px, 0.3, 0.035, [0.2, 0.22, 0.32]);
+    poly([[px - 0.01, 0.29], [px + 0.025, 0.29], [px + 0.01, 0.26]], [0.99, 0.7, 0.3]);
+    circle(px - 0.01, 0.31, 0.005, white);
+    poly([[0.78, 0.3], [0.78, 0.42], [0.9, 0.3]], [0.88, 0.95, 1]);
+    hill(0.0, 0.06, [0.88, 0.94, 0.99], rnd() * 3);
+  } else if (key === 'sports') {
+    page.drawRectangle({ x: box.x, y: box.y, width: box.width, height: box.height * 0.45, color: col([0.55, 0.8, 0.5]) });
+    for (let i = 0; i < 6; i++) poly([[i / 6, 0], [(i + 0.5) / 6, 0], [(i + 0.5) / 6, 0.45], [i / 6, 0.45]], [0.5, 0.76, 0.46], 0.5);
+    poly([[0.0, 0.22], [1, 0.22], [1, 0.225], [0, 0.225]], white, 0.8);
+    circle(0.5, 0.22, 0.07, white, 0.0);
+    page.drawCircle({ x: X(0.5), y: Y(0.22), size: 0.07 * S, borderColor: col(white), borderWidth: S * 0.006, opacity: 0 });
+    circle(0.85, 0.82, 0.08, pal.accent, 0.9);
+    for (let k = 0; k < 2; k++) {
+      const gx = k ? 0.88 : 0.04;
+      poly([[gx, 0.08], [gx, 0.4], [gx + 0.08, 0.4], [gx + 0.08, 0.08]], white, 0.0);
+      page.drawRectangle({ x: X(gx), y: Y(0.08), width: S * 0.08, height: S * 0.32, borderColor: col(white), borderWidth: S * 0.008, opacity: 0 });
+    }
+    const bx = 0.3 + rnd() * 0.4;
+    circle(bx, 0.16, 0.05, white);
+    for (const [u, v] of [[0, 0.16], [-0.025, 0.14], [0.025, 0.14], [0, 0.185]]) circle(bx + u, v, 0.012, [0.25, 0.25, 0.3]);
+    for (let i = 0; i < 4; i++) star(0.1 + rnd() * 0.8, 0.55 + rnd() * 0.4, 0.014, pal.accent, 0.9);
+    poly([[0.7, 0.45], [0.7, 0.56], [0.74, 0.56], [0.74, 0.5], [0.78, 0.5], [0.78, 0.56], [0.82, 0.56], [0.82, 0.45]], [0.98, 0.78, 0.35]);
+  } else if (key === 'bakery') {
+    page.drawRectangle({ x: box.x, y: box.y, width: box.width, height: box.height * 0.22, color: col([0.88, 0.7, 0.5]) });
+    const cx = 0.3 + rnd() * 0.3;
+    poly([[cx - 0.14, 0.22], [cx - 0.14, 0.36], [cx + 0.14, 0.36], [cx + 0.14, 0.22]], [0.98, 0.9, 0.78]);
+    poly([[cx - 0.12, 0.36], [cx - 0.12, 0.46], [cx + 0.12, 0.46], [cx + 0.12, 0.36]], [0.98, 0.78, 0.86]);
+    poly([[cx - 0.14, 0.36], [cx + 0.14, 0.36], [cx + 0.14, 0.385], [cx - 0.14, 0.385]], white);
+    poly([[cx - 0.12, 0.46], [cx + 0.12, 0.46], [cx + 0.12, 0.485], [cx - 0.12, 0.485]], white);
+    for (const dx of [-0.06, 0, 0.06]) {
+      poly([[cx + dx - 0.004, 0.485], [cx + dx - 0.004, 0.56], [cx + dx + 0.004, 0.56], [cx + dx + 0.004, 0.485]], [1, 0.95, 0.8]);
+      circle(cx + dx, 0.575, 0.012, [1, 0.7, 0.3]);
+    }
+    for (const dx of [-0.07, 0.0, 0.07]) circle(cx + dx, 0.505 - 0.018, 0.018, [0.9, 0.25, 0.3]);
+    const wx = 0.75 + rnd() * 0.1;
+    ellipse(wx, 0.28, 0.11, 0.035, [0.95, 0.8, 0.5]);
+    ellipse(wx, 0.3, 0.07, 0.02, [0.85, 0.6, 0.3]);
+    for (let i = 0; i < 12; i++) circle(rnd(), 0.55 + rnd() * 0.4, 0.005, white, 0.7);
+    circle(0.9, 0.85, 0.07, pal.accent, 0.8);
   } else {
     circle(0.78, 0.8, 0.12, [1, 0.88, 0.55], 0.95);
     hill(0.12, 0.08, [0.93, 0.74, 0.4], rnd() * 3);
