@@ -10,6 +10,9 @@ import { GRANDS_C } from './bands/grands-c.js';
 import { PETITS_D } from './bands/petits-d.js';
 import { MOYENS_D } from './bands/moyens-d.js';
 import { GRANDS_D } from './bands/grands-d.js';
+import { PETITS_E } from './bands/petits-e.js';
+import { MOYENS_E } from './bands/moyens-e.js';
+import { GRANDS_E } from './bands/grands-e.js';
 import { themeKey } from '../pdf/scenes.js';
 import { PAGE_COUNT } from './validate.js';
 
@@ -19,6 +22,18 @@ const BANDS = {
   moyens: { ...BASE, ...MORE_STORIES, ...MOYENS_NEW, ...MOYENS_D },
   grands: { ...GRANDS_A, ...GRANDS_B, ...GRANDS_C, ...GRANDS_D }
 };
+
+// Histoires supplémentaires : une même tranche d'âge peut proposer plusieurs histoires par thème.
+const EXTRA = { petits: [PETITS_E], moyens: [MOYENS_E], grands: [GRANDS_E] };
+
+function variantsOf(band, key) {
+  return [BANDS[band][key] || BANDS.moyens[key], ...EXTRA[band].map((x) => x[key]).filter(Boolean)];
+}
+
+/** Nombre d'histoires disponibles pour ce thème et cet âge. */
+export function storyCount({ theme, age }) {
+  return variantsOf(ageBand(age), themeKey(theme)).length;
+}
 
 export function ageBand(age) {
   const a = Number(age);
@@ -31,9 +46,9 @@ export function ageBand(age) {
 const typo = (s) => s.replace(/(\p{L})'(\p{L})/gu, '$1\u2019$2');
 
 /** Histoire complète sans IA, adaptée à l'âge et personnalisée avec le prénom. */
-export function localStory({ name, theme, age }) {
-  const key = themeKey(theme);
-  const tpl = BANDS[ageBand(age)][key] || BANDS.moyens[key];
+export function localStory({ name, theme, age, variant = 0 }) {
+  const all = variantsOf(ageBand(age), themeKey(theme));
+  const tpl = all[Number.isInteger(variant) && variant >= 0 ? variant % all.length : 0];
   const fill = (s) => typo(s.replaceAll('{name}', name));
   const lesson = tpl.lesson ? fill(tpl.lesson) : '';
   const last = Math.min(tpl.pages.length, PAGE_COUNT) - 1;

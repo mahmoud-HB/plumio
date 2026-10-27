@@ -4,7 +4,7 @@ import cors from 'cors';
 import multer from 'multer';
 import OpenAI from 'openai';
 import { aiStory } from './story/ai.js';
-import { localStory } from './story/local.js';
+import { localStory, storyCount } from './story/local.js';
 import { validateStory } from './story/validate.js';
 import { generateIllustrations } from './images.js';
 import { buildBook } from './pdf/book.js';
@@ -74,7 +74,7 @@ app.post('/api/generate', (req, res, next) => {
       }
     }
     if (!story) {
-      story = localStory({ name, theme, age });
+      story = localStory({ name, theme, age, variant: Math.floor(Math.random() * storyCount({ theme, age })) });
       const check = validateStory(story, { name, age });
       if (!check.ok) throw new Error(`Histoire locale invalide : ${check.problems.join(' ')}`);
     }
