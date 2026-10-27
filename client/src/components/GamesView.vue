@@ -21,6 +21,7 @@ const age = ref(7);
 const theme = ref('');
 const solution = ref(true);
 const variant = ref(0);
+const level = ref(0);
 const busy = ref('');
 const error = ref('');
 const done = ref('');
@@ -58,7 +59,7 @@ async function download(gameId) {
   done.value = '';
   busy.value = gameId;
   try {
-    const blob = await fetchGamesPdf({ name: trimmed.value, age: age.value, theme: theme.value, gameId, variant: variant.value, solution: solution.value });
+    const blob = await fetchGamesPdf({ name: trimmed.value, age: age.value, theme: theme.value, gameId, variant: variant.value, solution: solution.value, level: level.value });
     const slug = trimmed.value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-|-$/g, '').toLowerCase() || 'enfant';
     save(blob, `plumio-jeux-${slug}-${gameId === 'all' ? band.value : gameId}.pdf`);
     done.value = gameId === 'all' ? `Les ${games.value.length} jeux de ${trimmed.value} sont téléchargés.` : 'Le jeu est téléchargé. Il ne reste plus qu’à imprimer !';
@@ -75,7 +76,7 @@ async function download(gameId) {
     <section class="games-hero">
       <span class="eyebrow">Jeux à imprimer</span>
       <h1>Des jeux au prénom de votre enfant</h1>
-      <p class="lead">Huit jeux par tranche d’âge, personnalisés avec son prénom et l’univers qu’il aime. Téléchargez en PDF, imprimez en A4, et c’est parti !</p>
+      <p class="lead">Plus de quinze jeux par tranche d’âge (logique, maths, histoire, géographie, activités), personnalisés avec son prénom et l’univers qu’il aime. Téléchargez en PDF, imprimez en A4, et c’est parti !</p>
     </section>
 
     <form class="games-form card" @submit.prevent="download('all')" novalidate>
@@ -105,6 +106,17 @@ async function download(gameId) {
         <p class="field-hint">Les mots, les messages et les objectifs reprennent cet univers.</p>
       </div>
 
+      <div class="field">
+        <label for="games-level">Niveau de difficulté</label>
+        <select id="games-level" v-model.number="level">
+          <option :value="0">Automatique (selon l’âge exact)</option>
+          <option :value="1">Facile</option>
+          <option :value="2">Moyen</option>
+          <option :value="3">Difficile</option>
+        </select>
+        <p class="field-hint">Maths, histoire, géographie et énigmes : questions plus simples ou plus difficiles.</p>
+      </div>
+
       <div class="games-options">
         <label class="check-row"><input v-model="solution" type="checkbox" /> Ajouter les corrigés pour les parents</label>
         <button type="button" class="btn btn-ghost btn-sm" @click="variant += 1">🔄 Nouvelles grilles</button>
@@ -123,7 +135,7 @@ async function download(gameId) {
     </div>
 
     <div class="games-head">
-      <h2>{{ bandInfo.emoji }} Les {{ games.length || 8 }} jeux des {{ bandInfo.label }}</h2>
+      <h2>{{ bandInfo.emoji }} Les {{ games.length || 16 }} jeux des {{ bandInfo.label }}</h2>
       <button class="btn btn-primary" :disabled="Boolean(busy)" @click="download('all')">
         {{ busy === 'all' ? 'Préparation…' : 'Tout télécharger (PDF)' }}
       </button>

@@ -35,13 +35,13 @@ export async function generateBook({ name, theme, age, photo }) {
 }
 
 /** Télécharge un PDF de jeux (un jeu ou toute la tranche d'âge) ; renvoie un Blob. */
-export async function fetchGamesPdf({ name, age, theme, gameId = 'all', variant = 0, solution = false }) {
+export async function fetchGamesPdf({ name, age, theme, gameId = 'all', variant = 0, solution = false, level = 0 }) {
   let res;
   try {
     res = await fetch('/api/games/pdf', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, age: Number(age), theme: theme || undefined, gameId, variant, solution })
+      body: JSON.stringify({ name, age: Number(age), theme: theme || undefined, gameId, variant, solution, level: Number(level) })
     });
   } catch {
     throw new Error('Impossible de joindre le serveur. Vérifie ta connexion et réessaie.');

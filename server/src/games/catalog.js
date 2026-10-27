@@ -42,7 +42,33 @@ export const GAMES = [
   { id: 'anagrammes', band: 'grands', icon: '🔀', title: 'Anagrammes', blurb: 'Remettre en ordre 9 mots du thème, plus le prénom en bonus.', skill: 'Orthographe, vocabulaire', minutes: 20 },
   { id: 'bataille', band: 'grands', icon: '🚢', title: 'Bataille navale', blurb: 'Deux grilles et une flotte à imprimer pour défier un adversaire, avec l’Amiral au prénom de l’enfant.', skill: 'Stratégie, repérage', minutes: 30 },
   { id: 'logique', band: 'grands', icon: '🧮', title: 'Carrés magiques & pyramides', blurb: 'Deux carrés magiques et trois pyramides de nombres à compléter.', skill: 'Calcul, déduction', minutes: 25 },
-  { id: 'colonne', band: 'grands', icon: '🧱', title: 'Le mot en colonne', blurb: 'Placer les mots du thème pour faire apparaître le prénom dans la colonne centrale.', skill: 'Vocabulaire, logique', minutes: 20 }
+  { id: 'colonne', band: 'grands', icon: '🧱', title: 'Le mot en colonne', blurb: 'Placer les mots du thème pour faire apparaître le prénom dans la colonne centrale.', skill: 'Vocabulaire, logique', minutes: 20 },
+
+  { id: 'addimages', band: 'petits', icon: '➕', title: 'Mes premières additions', blurb: 'Étoiles et cœurs à compter pour additionner en images (3 niveaux).', skill: 'Maths, addition', minutes: 10, edu: true },
+  { id: 'comparer', band: 'petits', icon: '⚖️', title: 'Plus ou moins ?', blurb: 'Comparer des groupes : lequel en a le plus, le moins ?', skill: 'Maths, comparaison', minutes: 10, edu: true },
+  { id: 'chasse', band: 'petits', icon: '🧺', title: 'Chasse au trésor', blurb: 'Missions à cocher à la maison ou dehors, à l’univers du thème choisi.', skill: 'Observation, activité', minutes: 25, edu: true },
+  { id: 'bingo', band: 'petits', icon: '🎯', title: 'Bingo de la balade', blurb: 'Une grille 3×3 de choses à trouver autour de soi.', skill: 'Observation', minutes: 20, edu: true },
+  { id: 'defis', band: 'petits', icon: '🤸', title: 'Défis rigolos', blurb: '8 défis à relever en famille (mouvement, imitation, rires).', skill: 'Motricité, activité', minutes: 20, edu: true },
+
+  { id: 'problemes', band: 'moyens', icon: '🧩', title: 'Petits problèmes', blurb: '6 problèmes avec le prénom de l’enfant, corrigé détaillé pour les parents.', skill: 'Maths, raisonnement', minutes: 20, edu: true },
+  { id: 'tables', band: 'moyens', icon: '✖️', title: 'Mes tables', blurb: '16 calculs de tables de multiplication, avec astuces au corrigé.', skill: 'Maths, multiplication', minutes: 15, edu: true },
+  { id: 'histoire', band: 'moyens', icon: '🏰', title: 'Voyage dans l’histoire', blurb: 'QCM et vrai/faux sur l’histoire, avec explications au corrigé.', skill: 'Histoire, culture', minutes: 15, edu: true },
+  { id: 'geo', band: 'moyens', icon: '🌍', title: 'Tour du monde', blurb: 'QCM et vrai/faux de géographie, avec explications au corrigé.', skill: 'Géographie, culture', minutes: 15, edu: true },
+  { id: 'relier', band: 'moyens', icon: '🔗', title: 'Relie les paires', blurb: 'Relier capitales, pays, monuments… à leur partenaire.', skill: 'Géographie', minutes: 10, edu: true },
+  { id: 'chasse', band: 'moyens', icon: '🧺', title: 'Chasse au trésor', blurb: 'Missions à cocher, avec l’univers du thème choisi.', skill: 'Observation, activité', minutes: 25, edu: true },
+  { id: 'bingo', band: 'moyens', icon: '🎯', title: 'Bingo de la balade', blurb: 'Une grille 5×5 de choses à trouver autour de soi.', skill: 'Observation', minutes: 20, edu: true },
+  { id: 'defis', band: 'moyens', icon: '🤸', title: 'Défis en famille', blurb: '12 défis rigolos et créatifs à relever à plusieurs.', skill: 'Créativité, activité', minutes: 25, edu: true },
+  { id: 'escape', band: 'moyens', icon: '🗝️', title: 'Escape game', blurb: '5 énigmes à résoudre pour trouver le code du coffre.', skill: 'Logique, déduction', minutes: 25, edu: true },
+
+  { id: 'maths', band: 'grands', icon: '🧠', title: 'Défis de maths', blurb: '6 problèmes de maths (fractions, pourcentages, proportions…) avec démarche détaillée.', skill: 'Maths, raisonnement', minutes: 25, edu: true },
+  { id: 'histoire', band: 'grands', icon: '🏛️', title: 'Voyage dans l’histoire', blurb: 'QCM et vrai/faux sur l’histoire, avec explications au corrigé.', skill: 'Histoire, culture', minutes: 15, edu: true },
+  { id: 'geo', band: 'grands', icon: '🌍', title: 'Tour du monde', blurb: 'QCM et vrai/faux de géographie, avec explications au corrigé.', skill: 'Géographie, culture', minutes: 15, edu: true },
+  { id: 'relier', band: 'grands', icon: '🔗', title: 'Relie les paires', blurb: 'Relier capitales, fleuves, monuments… à leur partenaire.', skill: 'Géographie', minutes: 10, edu: true },
+  { id: 'frise', band: 'grands', icon: '⏳', title: 'Frise du temps', blurb: 'Remettre 6 événements dans l’ordre chronologique.', skill: 'Histoire, chronologie', minutes: 15, edu: true },
+  { id: 'chasse', band: 'grands', icon: '🧺', title: 'Chasse au trésor', blurb: 'Missions à cocher, avec l’univers du thème choisi.', skill: 'Observation, activité', minutes: 25, edu: true },
+  { id: 'bingo', band: 'grands', icon: '🎯', title: 'Bingo de la balade', blurb: 'Une grille 5×5 d’observations et de mini-défis.', skill: 'Observation', minutes: 20, edu: true },
+  { id: 'defis', band: 'grands', icon: '🤸', title: 'Défis en famille', blurb: '12 défis créatifs et sportifs à relever à plusieurs.', skill: 'Créativité, activité', minutes: 25, edu: true },
+  { id: 'escape', band: 'grands', icon: '🗝️', title: 'Escape game', blurb: '5 énigmes à résoudre pour trouver le code du coffre.', skill: 'Logique, déduction', minutes: 30, edu: true }
 ];
 
 export const gamesFor = (band) => GAMES.filter((g) => g.band === band);

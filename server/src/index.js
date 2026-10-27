@@ -130,7 +130,7 @@ app.get('/api/games/catalog', (_req, res) => {
 
 app.post('/api/games/pdf', async (req, res) => {
   try {
-    const { name, age, theme, gameId, variant, solution } = req.body || {};
+    const { name, age, theme, gameId, variant, solution, level } = req.body || {};
     const problem = validateGameInput({ name, age });
     if (problem) return res.status(400).json({ ok: false, error: problem });
     const band = bandOf(age);
@@ -142,7 +142,8 @@ app.post('/api/games/pdf', async (req, res) => {
       name, age, theme: THEMES.includes(theme) ? theme : '',
       gameIds: !gameId || gameId === 'all' ? 'all' : [gameId],
       variant: Number.isInteger(variant) && variant >= 0 && variant < 1000 ? variant : 0,
-      solution: solution === true
+      solution: solution === true,
+      level: [1, 2, 3].includes(level) ? level : 0
     });
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Length', pdf.length);

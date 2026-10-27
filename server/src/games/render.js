@@ -4,6 +4,8 @@ import { PAGE, sanitize, wrapParagraph } from '../pdf/layout.js';
 import { loadFonts, PALETTES } from '../pdf/book.js';
 import { ALL_WORDS, BANDS, GAMES, bandOf, findGame, gamesFor, themeData } from './catalog.js';
 import * as P from './puzzles.js';
+import { makeEduRenderers } from './edu.js';
+import { LEVEL_LABELS, resolveLevel } from './edu-math.js';
 
 const C = {
   paper: rgb(1, 0.985, 0.955),
@@ -704,6 +706,8 @@ const RENDERERS = {
   anagrammes: { solution: true, mission: (c) => `Les lettres se sont mélangées ! ${c.displayName} doit remettre chaque mot de l’univers « ${c.data.label} » en ordre.`, draw: drawAnagrams }
 };
 
+Object.assign(RENDERERS, makeEduRenderers({ C, AREA, de, STAR_PATH, HEART_PATH }));
+
 const clean = (name) => String(name ?? '').trim().replace(/\s+/g, ' ');
 
 export function validateGameInput({ name, age }) {
@@ -725,7 +729,7 @@ export function pagesFor({ age, gameIds, solution }) {
   return pages;
 }
 
-export async function buildGamesPdf({ name, age, theme = '', gameIds = 'all', variant = 0, solution = false }) {
+export async function buildGamesPdf({ name, age, theme = '', gameIds = 'all', variant = 0, solution = false, level = 0 }) {
   const error = validateGameInput({ name, age });
   if (error) throw new Error(error);
   const band = bandOf(age);
@@ -747,9 +751,11 @@ export async function buildGamesPdf({ name, age, theme = '', gameIds = 'all', va
     const r = RENDERERS[game.id];
     const ctx = {
       name: gridName, displayName, age: Number(age), band, data, variant, game,
+      level: resolveLevel(age, level),
       seed: `${gridName}|${data.key}|${game.id}|${band}|${variant}`
     };
     frame(cv, ctx, { title: game.title, mission: r.mission(ctx), game, solution: isSolution });
+    if (r.level) cv.text(`Niveau : ${LEVEL_LABELS[ctx.level]}`, PAGE.width - 56, 40, { font: 'label', size: 11, color: C.white, align: 'right' });
     r.draw(cv, ctx, isSolution);
   }
   return Buffer.from(await doc.save());

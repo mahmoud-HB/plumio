@@ -7,9 +7,9 @@ import { buildGamesPdf, validateGameInput } from '../src/games/render.js';
 
 const THEMES = ['Espace', 'Forêt magique', 'Pirates', 'Super-héros', 'Licornes', 'Dinosaures', 'Océan', 'Chevaliers & dragons', 'Savane', 'Robots & inventions', 'Cirque', 'Mystère & détectives', 'Fées & lutins', 'Banquise', 'Sports & champions', 'Pâtisserie & cuisine'];
 
-test('chaque tranche d’âge propose 8 jeux', () => {
-  for (const band of Object.keys(BANDS)) assert.equal(gamesFor(band).length, 8, band);
-  assert.equal(GAMES.length, 24);
+test('chaque tranche d’âge propose ses jeux (8 de base + éducatifs/activités)', () => {
+  for (const band of Object.keys(BANDS)) assert.equal(gamesFor(band).length, band === 'petits' ? 13 : 17, band);
+  assert.equal(GAMES.length, 47);
   assert.deepEqual([3, 5, 6, 8, 9, 12].map(bandOf), ['petits', 'petits', 'moyens', 'moyens', 'grands', 'grands']);
 });
 
@@ -83,8 +83,8 @@ test('carré magique et pyramide : valeurs cohérentes', () => {
   assert.equal(p.rows[0][0], p.rows[1][0] + p.rows[1][1]);
 });
 
-test('les 24 jeux produisent des PDF A4 non vides, avec corrigés', async () => {
-  for (const [age, expected] of [[4, 8 + 5], [7, 8 + 7], [11, 8 + 7]]) {
+test('les jeux produisent des PDF A4 non vides, avec corrigés', async () => {
+  for (const [age, expected] of [[4, 13 + 7], [7, 17 + 7 + 6], [11, 17 + 7 + 6]]) {
     const buf = await buildGamesPdf({ name: 'Éloïse', age, theme: 'Pirates', solution: true });
     const doc = await PDFDocument.load(buf);
     assert.equal(doc.getPageCount(), expected, `âge ${age}`);
