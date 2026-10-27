@@ -3,6 +3,7 @@
 const space = {
   title: '{name} et le doudou de la Lune',
   subtitle: 'Un petit voyage pour un gros câlin',
+  lesson: 'Quand quelqu’un est triste, on s’approche et on l’écoute.',
   intro: 'Ce soir, la Lune pleure dans le ciel. {name} monte dans une fusée pour l’aider.',
   scenes: [
     'a child at a bedroom window looking at a sad crescent moon, cozy night, storybook style',
@@ -33,6 +34,7 @@ const space = {
 const forest = {
   title: '{name} et le petit hérisson qui avait peur du noir',
   subtitle: 'Une promenade douce avec des amis de la forêt',
+  lesson: 'On a le droit d’avoir peur, et avec un ami, on ose.',
   intro: 'Dans la forêt, il y a une clairière secrète. {name} y rencontre un hérisson tout tremblant.',
   scenes: [
     'a child walking on a forest path in the afternoon, sunbeams, a small backpack',
@@ -56,13 +58,14 @@ const forest = {
     ['Le tunnel de lucioles', 'Le chemin passe sous des branches basses. C’est un tunnel ! Il fait sombre, mais mille lucioles brillent. Bzzz, bzzz ! On dirait des étoiles dans les arbres. « Regarde, Pic ! dit {name}. Le noir est plein de petites lumières. » Pic ouvre grand les yeux. « Le hibou avait raison ! » Il rit un peu. Mais soudain, une grande ombre ronde apparaît devant eux. Oh là là !'],
     ['La grande ombre', 'Pic se cache derrière {name}. La grande ombre bouge, bouge… Elle grogne : « Grooo ? » Puis elle sort des arbres. C’est un petit ours, tout duveteux ! Il tient un pot de miel. « Je suis en retard pour la fête, dit-il. J’avais peur d’être seul. » Tout le monde éclate de rire. « Mais nous aussi ! » dit Pic. Il n’a plus peur du tout.'],
     ['La clairière secrète', 'Ils arrivent enfin dans la clairière. Waouh ! Des lucioles brillent partout. Les animaux dansent en rond. Le lapin dort déjà. Le hibou chante : hou, hou, hou ! Pic entre le premier, fier comme un roi. « Je l’ai fait ! J’ai traversé le noir ! » Tous applaudissent. {name} a le cœur plein de joie. L’ours partage le miel avec tout le monde. Miam !'],
-    ['Merci, ami', 'La fête est finie. Pic serre la main de {name}. « Merci. Sans toi, je n’aurais pas osé. » {name} sourit. « Tu es courageux, Pic. Tu l’as fait tout seul ! » Le petit hérisson donne un câlin tout doux. Puis {name} rentre à la maison. Au lit, la veilleuse brille. {name} pense à Pic et aux lucioles. Plus de peur. Seulement de jolies lumières. Bonne nuit !']
+    ['Merci, ami', 'La fête est finie. Pic serre la main de {name}. « Merci. Sans toi, je n’aurais pas osé. » {name} sourit. « Tu es courageux, Pic. Tu as osé, même avec ta peur ! » Le petit hérisson donne un câlin tout doux. Puis {name} rentre à la maison. Au lit, la veilleuse brille. {name} pense à Pic et aux lucioles. Plus de peur. Seulement de jolies lumières. Bonne nuit !']
   ]
 };
 
 const pirates = {
   title: '{name} et le perroquet qui avait perdu sa voix',
   subtitle: 'Une petite chasse au trésor sur la mer bleue',
+  lesson: 'Quand on a un souci, on peut demander de l’aide.',
   intro: 'Le capitaine Pomme a un perroquet qui ne parle plus. {name} monte à bord pour l’aider.',
   scenes: [
     'a child on a beach finding a small wooden boat with a red sail, sunny sea',
@@ -79,7 +82,7 @@ const pirates = {
   pages: [
     ['Un petit bateau', 'Plouf, plouf ! Les vagues roulent sur la plage. {name} marche dans le sable chaud. Et là, que voit-on ? Un petit bateau en bois, avec une voile rouge ! Il flotte tout près du bord. « Ohé ! » crie une grosse voix. Un pirate agite la main sur le pont. Il porte un grand chapeau noir. « Montez à bord ! » Alors {name} saute dans le bateau. Hop !'],
     ['Le capitaine Pomme', 'Le pirate se présente. « Je suis le capitaine Pomme ! Je n’ai pas peur de la mer. Mais j’ai un gros souci. » Il montre son épaule. Un perroquet vert y est assis, tout triste. « Il s’appelle Coco. D’habitude, il chante toute la journée. Mais depuis hier, plus un mot ! » Le capitaine soupire. « Sans sa voix, le bateau est trop calme. Pouvez-vous nous aider, {name} ? »'],
-    ['Coco ne dit rien', '{name} s’approche de Coco. « Bonjour, Coco. » Le perroquet ouvre le bec. Rien ne sort. Pas un son. Il baisse la tête. Quelle tristesse ! {name} lui caresse les plumes. Elles sont douces comme de la soie. « Je sais ! dit le capitaine. Sur l’île aux Palmiers, il y a un coquillage magique. Il rend la voix à ceux qui l’ont perdue. » Les yeux de Coco brillent. Allons-y !'],
+    ['Coco ne dit rien', '{name} s’approche de Coco. « Bonjour, Coco. » Le perroquet ouvre le bec. Rien ne sort. Pas un son. Il baisse la tête. Quelle tristesse ! {name} lui caresse les plumes. Elles sont douces comme du coton. « Je sais ! dit le capitaine. Sur l’île aux Palmiers, il y a un coquillage magique. Il rend la voix à ceux qui l’ont perdue. » Les yeux de Coco brillent. Allons-y !'],
     ['Cap sur l’île', 'Le bateau part ! La voile se gonfle. Whouf ! Les vagues sont gentilles, et le ciel est tout bleu. Des dauphins sautent à côté : plouf, plouf ! {name} leur fait un coucou. Le capitaine chante tout seul, mais très faux. « La, la, laaa ! » Coco grimace. {name} rigole. Au bout d’un moment, on voit une petite île avec un grand palmier. Terre en vue !'],
     ['Une vieille carte', 'Le bateau s’arrête sur le sable. {name} descend en premier. Sur le palmier, il y a une carte, clouée avec une épingle. Le capitaine la lit. « Suivez le chemin des crabes. Au bout, le coquillage vous attend. » {name} regarde par terre. De petites traces dans le sable ! Clic, clic, clic. Elles partent vers les arbres. « On suit les traces ! » dit le capitaine, tout joyeux.'],
     ['Pinpin le crabe', 'Au bout des traces, il y a un crabe. Il est rouge et très petit. Il agite ses pinces : clic, clac ! « Je m’appelle Pinpin ! Vous cherchez le coquillage ? » demande-t-il. « Oui ! répond {name}. Pour Coco. » Pinpin hoche la tête. « Je le garde depuis longtemps. Mais personne ne sait s’en servir. Voulez-vous essayer ? » Il montre un rocher, tout au fond des palmiers.'],
@@ -93,6 +96,7 @@ const pirates = {
 const heroes = {
   title: '{name} et la cape de Zigzag',
   subtitle: 'Un petit héros au grand cœur',
+  lesson: 'Aider les autres, c’est être un vrai héros.',
   intro: 'Dans la ville, une petite cape rouge se cache dans un tiroir. Elle attend {name} depuis longtemps.',
   scenes: [
     'a child opening a drawer in a cozy room and finding a small red cape with a star, storybook style',
@@ -112,9 +116,9 @@ const heroes = {
     ['Un chien dans l’arbre', 'Dans le parc, quelqu’un aboie : ouaf, ouaf ! {name} court voir. Un petit chien est coincé tout en haut d’un arbre. Il tremble. Son maître, un vieux monsieur, ne sait pas quoi faire. « Il est monté après un écureuil, dit-il. Et maintenant il a peur de descendre ! » Le chien gémit : « Ouiiin ! » {name} regarde l’arbre. Il est très haut.'],
     ['Un cœur qui brille', '{name} grimpe sur la première branche. Puis sur la deuxième. Le chien regarde, les yeux ronds. « Doucement, petit. Je suis là », dit {name}. Dans sa poitrine, quelque chose devient chaud. C’est comme un soleil minuscule. {name} tend la main. Le chien sent l’odeur de la cape. Il avance, tout doucement. Hop ! Il saute dans les bras de {name}. Il lèche son nez. Slurp ! Le vieux monsieur applaudit très fort.'],
     ['Le super-pouvoir', 'La cape brille d’un coup ! Une jolie lumière dorée apparaît. Elle a la forme d’un cœur. « Voilà ton pouvoir, dit Zigzag. C’est ton cœur. Il aide les autres, et il leur donne du courage. » {name} sourit. « Mon cœur ? Mais je l’ai toujours eu ! » Zigzag rit. « Oui, il suffit de l’écouter. » {name} sent son cœur battre fort. Aider, c’est déjà être un héros.'],
-    ['Le ballon rouge', 'Plus loin, une petite fille pleure sur un banc. Son ballon rouge est parti dans le ciel ! Il est tout petit là-haut. « Je l’aimais tant ! » dit-elle. {name} pense très fort. Le cœur brille encore. Une idée arrive ! Dans sa poche, il y a un long ruban jaune. « Je vais essayer, dit {name}. Ne bouge pas, petite. »'],
+    ['Le ballon rouge', 'Plus loin, une petite fille pleure sur un banc. Son ballon rouge est parti dans le ciel ! Il est tout petit là-haut. « Je l’aimais tant ! » dit-elle. {name} pense très fort. Le cœur brille encore. Une idée arrive ! Dans sa poche, il y a un long ruban jaune. « Je vais essayer, dit {name}. Ne pleure plus, petite. »'],
     ['Un ruban dans le ciel', '{name} lance le ruban : zou ! Il vole haut, très haut. Il tourne autour de la ficelle du ballon. Le vent le pousse un peu. Encore un peu. Hop ! Le ballon est pris ! {name} tire doucement. Le ballon redescend, léger comme une plume. La petite fille saute de joie. « Merci, merci ! » Elle serre le ballon contre elle. {name} lui fait un clin d’œil.'],
-    ['Les feux en panne', 'Au carrefour, plus de feux ! Ils sont en panne. Les voitures klaxonnent : pouet, pouet ! La boulangère sort de sa boutique, de la farine sur le nez. « Oh là là, quel désordre ! » {name} a une idée. Cape au vent, {name} dirige la circulation : « Stop ! Avancez ! » Les voitures obéissent. Chacune passe à son tour. Le désordre s’arrête. La boulangère sourit.'],
+    ['Les feux en panne', 'Au croisement, les feux sont en panne ! Les voitures klaxonnent : pouet, pouet ! La boulangère sort de sa boutique, de la farine sur le nez. « Oh là là, quel désordre ! » {name} a une idée. Cape au vent, {name} reste sur le trottoir avec la boulangère. Ensemble, ils font de grands signes : « Chacun son tour ! » Les voitures attendent. Puis elles passent, une par une. Le désordre s’arrête. La boulangère sourit.'],
     ['La fête du quartier', 'Le soir, tout le quartier se retrouve dans la rue. La boulangère apporte un gâteau. Le vieux monsieur et son chien sont là. La petite fille tient son ballon. Ils chantent tous : « Bravo, {name} ! » Les mains applaudissent : clap, clap, clap ! {name} rougit un peu. « Je n’ai pas fait grand-chose… » « Si ! disent-ils. Tu as aidé. C’est le plus beau des pouvoirs. »'],
     ['Un héros au lit', 'À la maison, {name} range la cape sur la chaise. Zigzag brille, tout doucement, comme une veilleuse. Elle semble sourire. Le cœur de {name} est chaud et léger. Demain, il y aura d’autres amis à aider. Peut-être un chat, ou un enfant triste. Pour l’instant, c’est l’heure de dormir. {name} ferme les yeux. Bonne nuit, {name} ! Le cœur brille encore, dans le noir.']
   ]

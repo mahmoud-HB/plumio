@@ -4,6 +4,7 @@ export const MORE_STORIES = {
   dinos: {
     title: '{name} et l’œuf qui voulait voir la mer',
     subtitle: 'Une expédition au pays des dinosaures pour ramener un bébé chez lui',
+    lesson: 'Aimer, c’est aussi laisser partir quelqu’un vers l’endroit où il sera heureux.',
     intro: 'Au fond d’une vallée oubliée, un œuf tout tiède attendait quelqu’un. Ce fut {name} qui le trouva.',
     scenes: [
       'a child with a backpack finding a big speckled egg in a fern valley',
@@ -27,13 +28,14 @@ export const MORE_STORIES = {
       ['Le raptor malin', 'Sur la crête, un petit raptor aux plumes rousses surgit d’un buisson. Il avait l’air malicieux et nerveux. « Vous allez vers la mer ? Moi, je connais le raccourci ! » dit-il en agitant une carte dessinée sur une écorce. {name} hésita. Un raccourci pouvait être précieux, ou piégé. Alors {name} posa une question : « Et toi, que veux-tu en échange ? » Le raptor baissa la tête. Il voulait simplement de la compagnie pour traverser le canyon, car il n’osait pas y aller seul. Une confidence qui valait mieux qu’un trésor.'],
       ['Le canyon des os', 'Le canyon s’ouvrait comme une immense bouche de pierre, et seul un pont étrange le traversait : une arche de gros os blanchis, laissés par des créatures d’autrefois. Le raptor, qui s’appelait Filou, marchait en tête, tremblant mais courageux. {name} suivait avec Tricot, et chacun encourageait l’autre à voix basse. Le vent sifflait dans les cavités des os et jouait une mélodie bizarre. À mi-chemin, personne ne parlait plus. Puis ils arrivèrent de l’autre côté, soulagés, et Filou lança un cri de victoire qui fit trembler les parois.'],
       ['Enfin la mer', 'Derrière la dernière colline, l’horizon devint bleu. La mer s’étendait, scintillante, avec de petites vagues qui roulaient sur le sable doré. Tricot courut, glissa, culbuta dans l’écume et se releva en éclaboussant tout le monde. Il riait aux éclats, à sa manière couinante. Filou fit la roue, {name} lança ses chaussures et plongea les pieds dans l’eau fraîche. Sur la plage, Barnabé les attendait déjà, arrivé à grands pas, son long cou dressé comme un mât. Le rêve de Tricot était devenu réel, et personne n’avait envie de le quitter.'],
-      ['Un coquillage pour rentrer', 'Le soir, Tricot s’endormit contre le flanc de Barnabé, qui avait promis de veiller sur lui. {name} comprit alors que le bébé avait trouvé sa nouvelle famille, au bord de l’eau. Avant de partir, Tricot déposa un coquillage rose dans la paume de {name}. « Il garde le bruit de la mer », chuchota Filou. Quand {name} rentra à la maison, la nuit tombait. Au creux de l’oreille, le coquillage murmurait encore. Quelque part, très loin, un petit dinosaure dormait heureux, et {name} sourit en fermant les yeux.']
+      ['Un coquillage pour rentrer', 'Le soir, Tricot s’endormit contre le flanc de Barnabé, qui avait promis de veiller sur lui. {name} sentit sa gorge se serrer, mais comprit que le bébé avait trouvé sa nouvelle famille, au bord de l’eau. Aimer, c’était aussi le laisser partir. Avant de partir, Tricot déposa un coquillage rose dans la paume de {name}. « Il garde le bruit de la mer », chuchota Filou. Quand {name} rentra à la maison, la nuit tombait. Au creux de l’oreille, le coquillage murmurait encore. Quelque part, très loin, un petit dinosaure dormait heureux, et {name} sourit en fermant les yeux.']
     ]
   },
 
   ocean: {
     title: '{name} et la perle qui chantait',
     subtitle: 'Une plongée au royaume des vagues pour retrouver une mélodie perdue',
+    lesson: 'Chanter faux n’est pas grave : l’important est d’oser commencer, avec les autres.',
     intro: 'Un matin, la mer se tut. Plus un clapotis, plus un murmure. {name} décida de plonger pour comprendre pourquoi.',
     scenes: [
       'a child on a beach at dawn, silent calm sea, a glowing shell in the sand',
@@ -64,6 +66,7 @@ export const MORE_STORIES = {
   knights: {
     title: '{name} et le dragon qui avait peur du feu',
     subtitle: 'Un jeune chevalier, un château endormi et un dragon pas comme les autres',
+    lesson: 'Écouter avant de juger transforme parfois une peur en amitié.',
     intro: 'Au royaume de Hautepierre, on disait qu’un dragon rôdait. Le jour où {name} reçut son épée de bois, l’aventure commença.',
     scenes: [
       'a child in a toy knight costume in a castle courtyard, receiving a wooden sword from a queen',
@@ -94,6 +97,7 @@ export const MORE_STORIES = {
   safari: {
     title: '{name} et la petite girafe qui voulait toucher le ciel',
     subtitle: 'Un safari plein de rencontres pour exaucer un rêve très haut',
+    lesson: 'Un rêve trop haut devient plus beau quand on le partage avec des amis.',
     intro: 'Au cœur de la savane, là où l’herbe est dorée, {name} reçut une mission : aider une girafe à réaliser son rêve.',
     scenes: [
       'a child with binoculars on a safari jeep at sunrise, golden savanna',

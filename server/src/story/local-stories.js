@@ -5,6 +5,7 @@ export const LOCAL_STORIES = {
   space: {
     title: '{name} et l’étoile qui avait perdu sa lumière',
     subtitle: 'Un voyage entre les planètes pour rallumer une petite étoile',
+    lesson: 'Derrière un grand bruit se cache parfois quelqu’un de seul : écoute avant de juger.',
     intro: 'Certaines nuits, une étoile s’éteint. Cette nuit-là, {name} décida de lui rendre sa lumière.',
     scenes: [
       'a child gazing at a night sky from a garden, a small dim star falling',
@@ -26,8 +27,8 @@ export const LOCAL_STORIES = {
       ['La planète aux anneaux', 'Au bout de plusieurs heures, une grande planète rose apparut, entourée d’anneaux de glace étincelante. La fusée se faufila entre les cristaux qui tintaient comme des clochettes. Bip repéra une lueur dorée au creux d’un anneau. « Là ! Le premier morceau ! » Mais les cristaux se resserraient. {name} dut piloter avec une grande douceur, en tournant le volant millimètre par millimètre. Un tintement joyeux salua le passage, et un éclat doré vint se loger dans la main de Mira, qui sourit pour la première fois.'],
       ['Le champ de rochers', 'Le deuxième éclat se cachait au cœur d’un nuage de rochers qui dansaient dans tous les sens. Chaque virage faisait trembler la fusée. « Bip, dis-moi quand tourner ! » cria {name}. Le petit robot compta à voix haute, calme et précis. Gauche, droite, en bas, encore en bas ! Un rocher plus grand que les autres passa si près que Mira ferma les yeux. Puis, d’un coup, le calme revint. De l’autre côté, le deuxième éclat flottait, paisible. Ensemble, les trois amis éclatèrent de rire, soulagés et fiers.'],
       ['Le nuage qui boudait', 'Pour trouver le dernier morceau, Bip guida la fusée derrière une petite planète grise. Là, un énorme nuage sombre ronflait, avec des étincelles dorées prisonnières dans son ventre. « Allez-vous-en ! gronda-t-il. C’est ma lumière, je l’ai trouvée ! » Mira recula. Mais {name} remarqua que le nuage tremblait. Autour de lui, il n’y avait ni étoile ni compagnon, seulement le vide. Alors la peur de Mira se transforma en doute : et si ce nuage n’était pas méchant du tout, simplement très seul ?'],
-      ['Un nuage tout seul', '{name} éteignit les moteurs et s’approcha doucement. « Comment t’appelles-tu ? » demanda {name} gentiment. Le nuage hésita longtemps avant de répondre. « Grognon, dit-il enfin. J’ai froid depuis toujours. Quand j’ai vu cette lumière tomber, je l’ai gardée pour me réchauffer. Personne ne vient jamais me voir. » Mira baissa les yeux, touchée. Elle avait cru que son voleur était un monstre, et elle découvrait un voisin triste. Parfois, derrière un grand bruit, se cache simplement un grand besoin d’amitié.'],
-      ['La lanterne partagée', '{name} eut alors une idée. Avec les trois éclats et le fil de cuivre de la fusée, l’enfant fabriqua une petite lanterne et la tendit à Grognon. « Garde-la près de toi, dit {name}. Elle te réchauffera. Et Mira, si tu veux bien, reviendra te rendre visite chaque nuit pour la rallumer avec toi. » Mira hocha la tête avec joie. Le nuage rosit de bonheur, et quand la lanterne s’illumina, une vague de lumière dorée se répandit dans tout le ciel. Mira brillait de nouveau, plus vive que jamais, entourée de comètes joyeuses qui faisaient la ronde.'],
+      ['Un nuage tout seul', '{name} éteignit les moteurs et s’approcha doucement. « Comment t’appelles-tu ? » demanda {name} gentiment. Le nuage hésita longtemps avant de répondre. « Grognon, dit-il enfin. J’ai froid depuis toujours. Quand j’ai vu cette lumière tomber, je l’ai gardée pour me réchauffer. Personne ne vient jamais me voir. » Mira baissa les yeux, touchée. Elle avait cru que son voleur était un monstre, et elle découvrait un voisin triste. Parfois, derrière un grand bruit, se cache simplement un grand besoin d’amitié. Grognon hésita, renifla, puis tendit de lui-même le dernier éclat doré.'],
+      ['La lanterne partagée', 'Touché par la gentillesse de {name}, Grognon avait rendu le troisième éclat. {name} eut alors une idée. Avec les trois éclats et le fil de cuivre de la fusée, l’enfant fabriqua une petite lanterne et la tendit à Grognon. « Garde-la près de toi, dit {name}. Elle te réchauffera. Et Mira, si tu veux bien, reviendra te rendre visite chaque nuit pour la rallumer avec toi. » Mira hocha la tête avec joie. Le nuage rosit de bonheur, et quand la lanterne s’illumina, une vague de lumière dorée se répandit dans tout le ciel. Mira brillait de nouveau, plus vive que jamais, entourée de comètes joyeuses qui faisaient la ronde.'],
       ['Retour à la maison', 'Le voyage du retour fut tendre et paisible. Mira s’en alla rejoindre sa place dans le ciel, et Grognon, devenu doux comme une barbe à papa, lui fit signe de loin. Bip s’endormit en bourdonnant dans les bras de {name}. À l’aube, la fusée se posa doucement sur la pelouse, perlée de rosée. Ce soir-là, quand la nuit tomba, une étoile plus brillante que les autres cligna de l’œil à la fenêtre. {name} sourit, la tête sur l’oreiller. On peut aller très loin, quand on veut aider quelqu’un.']
     ]
   },
@@ -35,6 +36,7 @@ export const LOCAL_STORIES = {
   forest: {
     title: '{name} et le secret de la forêt qui chuchote',
     subtitle: 'Une aventure pour retrouver la clé des saisons',
+    lesson: 'Face à une bêtise, mieux vaut partager et écouter que poursuivre et gronder.',
     intro: 'Dans la forêt de Brumelune, les arbres parlent bas. Un matin, ils appelèrent {name}.',
     scenes: [
       'a child at the edge of an enchanted forest, trees whispering, glowing leaves',
@@ -65,6 +67,7 @@ export const LOCAL_STORIES = {
   pirates: {
     title: '{name} et le trésor du Perroquet d’Or',
     subtitle: 'Une chasse au trésor en pleine mer, sans bagarre et avec beaucoup de rires',
+    lesson: 'Un vrai trésor grandit quand on le partage, et la gentillesse ouvre plus de portes que la force.',
     intro: 'Un vieux coffre, une carte déchirée et un navire prêt à lever l’ancre : l’aventure de {name} peut commencer.',
     scenes: [
       'a child finding a torn treasure map in an old chest in an attic',
@@ -95,6 +98,7 @@ export const LOCAL_STORIES = {
   heroes: {
     title: '{name} et la ville qui ne savait plus briller',
     subtitle: 'Un super-pouvoir qui se cache là où on ne l’attend pas',
+    lesson: 'Un vrai héros remarque ceux qui vont mal, et un geste gentil rallume une lumière.',
     intro: 'À Lumina-les-Toits, la ville s’est éteinte un matin. Un seul enfant pouvait la sauver : {name}.',
     scenes: [
       'a child in a bright cape on a rooftop, a city with dim lights behind',
@@ -125,6 +129,7 @@ export const LOCAL_STORIES = {
   unicorns: {
     title: '{name} et la licorne de la Colline Arc-en-ciel',
     subtitle: 'Comment retrouver les couleurs envolées d’un royaume enchanté',
+    lesson: 'Celui qu’on laisse de côté a juste besoin d’être invité à jouer.',
     intro: 'Quand les couleurs de la Colline Arc-en-ciel se sont envolées, une licorne a demandé de l’aide à {name}.',
     scenes: [
       'a child discovering a white unicorn under a dim rainbow on a hill',

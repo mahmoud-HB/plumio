@@ -3,6 +3,7 @@
 const robots = {
   title: '{name} et Boulon, le robot de la brocante',
   subtitle: 'Une réparation, une invention et tout un quartier qui se remet à sourire',
+  lesson: 'Aider les autres, même un grincheux, ouvre bien des portes et rend le quartier plus gai.',
   intro: 'Sur l’étal d’une brocante dormait un petit robot tout rouillé. {name} ne savait pas encore que ce robot allait changer la rue entière.',
   scenes: [
     'a child at a flea market stall picking up a small rusty round robot among old objects',
@@ -33,6 +34,7 @@ const robots = {
 const circus = {
   title: '{name} et le grand numéro du chapiteau bleu',
   subtitle: 'Quand le trac s’invite en coulisses, un cirque entier se serre les coudes',
+  lesson: 'Avoir le trac est normal : avec des amis, on trouve le courage d’entrer en piste.',
   intro: 'Un chapiteau bleu venait de se poser sur la place du village. {name} avait reçu un billet très spécial, et un rôle auquel personne ne s’attendait.',
   scenes: [
     'a child holding a golden ticket in front of a big blue circus tent at sunset',
@@ -49,7 +51,7 @@ const circus = {
   pages: [
     ['Un billet doré', 'Un matin, une affiche multicolore apparut sur la place. Le cirque Bleu Nuit venait d’arriver ! Juste en dessous, un petit billet doré dépassait de la boîte aux lettres de {name}, avec ces mots : « Venez ce soir, on a besoin de vous. » Sans une hésitation, {name} enfila ses baskets et courut jusqu’au chapiteau. De près, la toile bleue sentait la barbe à papa et la sciure. Une fanfare répétait quelque part, trop fort et pas très juste, ce qui rendait l’endroit encore plus joyeux.'],
     ['Monsieur Moustache', 'Le directeur du cirque, un grand monsieur à la moustache en spirale, accueillit {name} au pied d’une malle pleine de costumes. « Je m’appelle Monsieur Moustache, dit-il, et mon assistant s’est foulé la cheville. Ce soir, quelqu’un doit tenir le projecteur et ouvrir le rideau au bon moment. Voulez-vous nous aider ? » {name} accepta tout de suite, avec plaisir. On lui remit un gilet brodé de petites étoiles. Il y avait tant à découvrir que le temps filait, entre paillettes et roulements de tambour.'],
-    ['Le nez de Pomme', 'Derrière un rideau, un petit clown nommé Pomme tenait son nez rouge entre les doigts. Il était fendu en deux. « Sans lui, je ne fais plus rire personne, soupira Pomme. Je ne me sens pas clown du tout. » {name} s’assit près de lui. {name} eut une idée : un bout de ruban adhésif, un peu de peinture rouge, et le tour serait joué. Le résultat fut un peu bosselé, mais assez drôle pour arracher un éclat de rire à Pomme. « Il est parfait, murmura-t-il. Vous me donnerez bien un coup de pouce, tout à l’heure ? »'],
+    ['Le nez de Pomme', 'Derrière un rideau, un petit clown nommé Pomme tenait son nez rouge entre les doigts. Il était fendu en deux. « Sans lui, je ne fais plus rire personne, soupira Pomme. Je ne me sens pas clown du tout. » {name} s’assit près de lui et eut une idée : un bout de ruban adhésif, un peu de peinture rouge, et le tour serait joué. Le résultat fut un peu bosselé, mais assez drôle pour arracher un éclat de rire à Pomme. « Il est parfait, murmura-t-il. Vous me donnerez bien un coup de pouce, tout à l’heure ? »'],
     ['Trois balles et un fou rire', 'Pour se détendre, Pomme proposa d’apprendre à jongler. Une acrobate prénommée Lila, qui sautait en l’air comme un ressort, se joignit à eux. Trois balles de couleur volèrent aussitôt dans tous les sens. L’une rebondit sur un tabouret, une autre fila sous une malle, la dernière atterrit sur le chapeau de Monsieur Moustache. {name} riait tellement que les larmes coulaient. Au quatrième essai, pourtant, les balles tournèrent en rond comme par magie. « Tu vois, dit Lila, tout vient avec un peu de patience et beaucoup de maladresse. »'],
     ['Un éléphant serviable', 'Il fallait ensuite installer l’échelle du trapèze, lourde comme un petit camion. {name} tira, poussa, s’essouffla. Soudain, une grande ombre grise s’avança : Bartholomée, l’éléphant du cirque, qui attrapa l’échelle de sa trompe comme une plume. Il la souleva et la posa exactement au bon endroit. Puis il lança un barrissement poli. « Il dit que ce n’est rien, traduisit Lila. Il adore rendre service. » {name} lui offrit une pomme, et l’éléphant la glissa dans sa bouche avec une délicatesse étonnante, en clignant d’un œil doux.'],
     ['Un papillon dans le ventre', 'La nuit tomba, et le public commença à remplir les gradins. En jetant un œil par le rideau, {name} sentit ses mains trembler. Il y avait tant de monde, tant de regards ! Un papillon sembla voleter dans son ventre. « C’est le trac, murmura Lila, juste derrière. Chez nous, tout le monde l’a, même Bartholomée. » Pomme proposa de respirer en comptant jusqu’à quatre, puis jusqu’à six. Cela fonctionna un peu. Il restait quelques minutes avant le premier numéro. Le cœur de {name} battait fort, mais plus tout à fait de peur : d’impatience aussi.'],
@@ -63,6 +65,7 @@ const circus = {
 const mystery = {
   title: '{name} et le mystère des chaussons disparus',
   subtitle: 'Une enquête douce dans un village où rien ne se perd… ou presque',
+  lesson: 'Avant d’accuser, on cherche à comprendre : souvent, quelqu’un a simplement besoin d’aide.',
   intro: 'Dans le village des Trois-Ponts, quelqu’un avait fait disparaître tous les chaussons de la boulangerie. {name} sortit son carnet et décida de mener l’enquête.',
   scenes: [
     'a child with a notebook and magnifying glass in front of a cosy village bakery, a baker holding one slipper',

@@ -35,15 +35,19 @@ export function localStory({ name, theme, age }) {
   const key = themeKey(theme);
   const tpl = BANDS[ageBand(age)][key] || BANDS.moyens[key];
   const fill = (s) => typo(s.replaceAll('{name}', name));
+  const lesson = tpl.lesson ? fill(tpl.lesson) : '';
+  const last = Math.min(tpl.pages.length, PAGE_COUNT) - 1;
   return {
     title: fill(tpl.title),
     subtitle: fill(tpl.subtitle),
     intro: fill(tpl.intro),
+    lesson,
     characterLook: '',
     pages: tpl.pages.slice(0, PAGE_COUNT).map(([title, text], i) => ({
       n: i + 1,
       title: fill(title),
-      text: fill(text),
+      // La leçon clôt la dernière page, dans un paragraphe distinct
+      text: fill(text) + (lesson && i === last ? `\n${fill('Ce que {name} retient : ')}${tpl.lesson.startsWith('{') ? lesson : lesson.charAt(0).toLowerCase() + lesson.slice(1)}` : ''),
       scene: tpl.scenes[i]
     }))
   };
