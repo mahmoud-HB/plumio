@@ -2,6 +2,7 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { base64ToBlob } from '../lib/media.js';
 import { THEMES } from '../lib/themes.js';
+import { fetchAudioStatus, fetchStoryAudio } from '../lib/api.js';
 import { buildSegments, createNarrator, frenchVoices, speechSupported } from '../lib/narrator.js';
 
 const props = defineProps({
@@ -39,6 +40,32 @@ function download() {
 function openTab() {
   window.open(ensureUrl(), '_blank', 'noopener');
 }
+
+// Voix haute qualité (MP3 généré par le serveur) : proposée seulement si le serveur l'a activée
+const hqAvailable = ref(false);
+const hqState = ref('idle'); // idle | loading | ready | error
+const hqUrl = ref('');
+const hqError = ref('');
+
+onMounted(async () => { hqAvailable.value = await fetchAudioStatus(); });
+
+async function makeHq() {
+  if (hqState.value === 'loading') return;
+  hqState.value = 'loading';
+  hqError.value = '';
+  narrator?.stop();
+  try {
+    const blob = await fetchStoryAudio(props.result.story);
+    hqUrl.value && URL.revokeObjectURL(hqUrl.value);
+    hqUrl.value = URL.createObjectURL(blob);
+    hqState.value = 'ready';
+  } catch (e) {
+    hqError.value = `${e.message} Tu peux utiliser la lecture classique ci-dessous.`;
+    hqState.value = 'error';
+  }
+}
+
+const hqFileName = computed(() => (props.result.fileName || 'histoire.pdf').replace(/\.pdf$/i, '') + '.mp3');
 
 // Lecture audio (synthèse vocale du navigateur, gratuite, sans fichier à télécharger)
 const canSpeak = speechSupported();
@@ -83,6 +110,7 @@ const go = (d) => {
 
 onBeforeUnmount(() => {
   pdfUrl.value && URL.revokeObjectURL(pdfUrl.value);
+  hqUrl.value && URL.revokeObjectURL(hqUrl.value);
   if (canSpeak) { narrator?.stop(); window.speechSynthesis.removeEventListener('voiceschanged', loadVoices); }
 });
 </script>
@@ -132,6 +160,16 @@ onBeforeUnmount(() => {
         <button class="btn btn-ghost btn-block" @click="openTab">Ouvrir dans un nouvel onglet</button>
         <div class="audio-card">
           <div class="audio-title"><span aria-hidden="true">🎧</span> Écouter l’histoire</div>
+          <div v-if="hqAvailable" class="audio-hq">
+            <button v-if="hqState !== 'ready'" class="btn btn-primary btn-block" :disabled="hqState === 'loading'" @click="makeHq">
+              {{ hqState === 'loading' ? 'Préparation de la voix… (≈ 20 s)' : '✨ Voix haute qualité (écoute + MP3)' }}
+            </button>
+            <template v-else>
+              <audio :src="hqUrl" controls preload="auto" class="audio-player"></audio>
+              <a class="btn btn-soft btn-block" :href="hqUrl" :download="hqFileName">⬇ Télécharger le MP3</a>
+            </template>
+            <p v-if="hqError" class="notice notice-error inline" role="alert">{{ hqError }}</p>
+          </div>
           <template v-if="canSpeak">
             <div class="audio-controls">
               <button class="btn btn-soft" :aria-label="audioState === 'playing' ? 'Mettre en pause' : 'Lire l’histoire'" @click="toggleAudio">

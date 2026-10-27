@@ -12,6 +12,7 @@ import { detectImageType } from './pdf/layout.js';
 import { themeKey } from './pdf/scenes.js';
 import { buildGamesPdf, validateGameInput } from './games/render.js';
 import { BANDS, GAMES, bandOf } from './games/catalog.js';
+import { TtsError, checkRateLimit, dailyBudgetLeft, spendDailyChars, synthesizeStory, ttsConfigured } from './audio/tts.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -150,6 +151,31 @@ app.post('/api/games/pdf', async (req, res) => {
   } catch (e) {
     console.error('games pdf', e);
     res.status(500).json({ ok: false, error: 'Impossible de créer les jeux pour le moment. Réessaie dans un instant.' });
+  }
+});
+
+app.get('/api/audio/status', (_req, res) => {
+  res.json({ ok: true, available: ttsConfigured() });
+});
+
+app.post('/api/audio', async (req, res) => {
+  if (!ttsConfigured()) return res.status(503).json({ ok: false, error: 'La voix haute qualité n’est pas activée.' });
+  if (!checkRateLimit(req.ip || 'unknown')) {
+    return res.status(429).json({ ok: false, error: 'Trop de demandes audio pour le moment. Utilise la lecture classique ou réessaie plus tard.' });
+  }
+  if (!dailyBudgetLeft()) {
+    return res.status(429).json({ ok: false, error: 'La voix haute qualité est momentanément épuisée. Utilise la lecture classique.' });
+  }
+  try {
+    const { audio, chars } = await synthesizeStory(req.body?.story);
+    spendDailyChars(chars);
+    res.setHeader('Content-Type', 'audio/mpeg');
+    res.setHeader('Content-Length', audio.length);
+    res.setHeader('Cache-Control', 'no-store');
+    res.send(audio);
+  } catch (e) {
+    if (!(e instanceof TtsError)) console.error('audio', e);
+    res.status(e instanceof TtsError ? e.status : 500).json({ ok: false, error: e instanceof TtsError ? e.message : 'Impossible de créer l’audio pour le moment.' });
   }
 });
 

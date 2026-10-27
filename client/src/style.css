@@ -357,3 +357,5 @@ input[type='text']:focus { outline: none; border-color: var(--primary); box-shad
   .games-teaser { grid-template-columns: 1fr; }
   .games-head .btn { width: 100%; }
 }
+.audio-hq { display: grid; gap: .6rem; }
+.audio-player { width: 100%; }

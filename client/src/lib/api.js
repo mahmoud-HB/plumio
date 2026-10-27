@@ -64,3 +64,33 @@ export async function fetchGamesCatalog() {
   if (!res.ok || !data?.ok) throw new Error('Impossible de charger la liste des jeux. Réessaie dans un instant.');
   return data;
 }
+
+/** La voix haute qualité (Google TTS) est-elle activée côté serveur ? Jamais bloquant. */
+export async function fetchAudioStatus() {
+  try {
+    const res = await fetch('/api/audio/status');
+    const data = await res.json();
+    return Boolean(res.ok && data?.available);
+  } catch {
+    return false;
+  }
+}
+
+/** Génère le MP3 de l’histoire ; renvoie un Blob. */
+export async function fetchStoryAudio(story) {
+  let res;
+  try {
+    res = await fetch('/api/audio', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ story: { title: story.title, subtitle: story.subtitle, pages: story.pages.map((p) => ({ title: p.title, text: p.text })) } })
+    });
+  } catch {
+    throw new Error('Impossible de joindre le serveur. Vérifie ta connexion et réessaie.');
+  }
+  if (!res.ok) {
+    const data = await res.json().catch(() => null);
+    throw new Error(data?.error || friendlyError(res.status));
+  }
+  return res.blob();
+}
